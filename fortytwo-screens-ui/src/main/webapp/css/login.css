@@ -1,0 +1,42 @@
+.z-grid-odd > .z-row-inner, .z-grid-odd > .z-cell {
+    background: #fafafa none repeat scroll 0 0;
+}
+.z-window-header {
+    color: #000000;
+    cursor: default;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 24px;
+    overflow: hidden;
+    padding: 3px 0 5px;
+}
+.z-window {
+    background: #dfe8f6 none repeat scroll 0 0;
+    border: 1px solid #9c9c9c;
+    border-radius: 4px;
+    overflow: hidden;
+    padding: 4px;
+}
+.z-combobox-input[readonly] {
+    background-color: #FFFFFF;
+}
+.name, .label{
+    float:right;
+}
+.grid.z-row > .z-cell {
+    background: #fafafa;
+}
+.z-grid-odd > .z-row-inner, .z-grid-odd > .z-cell {
+    background: #fafafa none repeat scroll 0 0;
+}
+.grid.z-row > .z-cell {
+    background: #fafafa;
+}
+.z-grid-odd > .z-row-inner, .z-grid-odd > .z-cell {
+    background: #fafafa none repeat scroll 0 0;
+}
+.z-row:hover > .z-row-inner, .z-row:hover > .z-cell {
+    background: #fafafa none repeat scroll 0 0 padding-box;
+}

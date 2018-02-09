@@ -1,0 +1,17 @@
+        <window title="${l:i18nLabel('com.confirm')}" mode="modal" border="normal"
+            width="300px" visible="@load(not empty vm.deleteMessage)">
+            <vbox hflex="true">
+                <hlayout height="50px">
+                    <image src="~./zul/img/msgbox/question-btn.png" />
+                    <label value="@load(vm.deleteMessage)" />
+                </hlayout>
+                <hbox pack="center" hflex="true">
+                    <button28 id="deleteButton2"
+                        autodisable="deleteButton2,cancelButton2"
+                        onClick="@command('deleteData')" />
+                    <button28 id="cancelButton2"
+                        autodisable="deleteButton2,cancelButton2"
+                        onClick="@command('cancelDelete')" />
+                </hbox>
+            </vbox>
+        </window>

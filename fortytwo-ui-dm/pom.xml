@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.arvato-systems.t9t</groupId>
+        <artifactId>fortytwo-ui-build</artifactId>
+        <version>4.3-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>fortytwo-ui-dm</artifactId>
+    <packaging>pom</packaging>
+    <description>Dependency Management for all fortytwo-ui modules</description>
+
+    <!-- Set versions for all artifacts created in this repository -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.arvato-systems.t9t</groupId>
+                <artifactId>fortytwo-base-ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.arvato-systems.t9t</groupId>
+                <artifactId>fortytwo-screens-ui</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
+            </dependency>
+            <dependency>
+                <groupId>com.arvato-systems.t9t</groupId>
+                <artifactId>fortytwo-ui-war</artifactId>
+                <version>${project.version}</version>
+                <type>war</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

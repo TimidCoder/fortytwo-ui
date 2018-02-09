@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.arvato-systems.t9t</groupId>
+        <artifactId>fortytwo-settings-ui</artifactId>
+        <version>4.3-SNAPSHOT</version>
+        <relativePath>../fortytwo-settings-ui</relativePath>
+    </parent>
+
+    <artifactId>fortytwo-screens-ui</artifactId>
+    <packaging>war</packaging>
+    <description>The fortytwo-screens-ui Project</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.arvato-systems.t9t</groupId>
+            <artifactId>fortytwo-base-ui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.zkoss.theme</groupId>
+            <artifactId>silvertail</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

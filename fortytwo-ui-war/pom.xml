@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.arvato-systems.t9t</groupId>
+        <artifactId>fortytwo-settings-ui</artifactId>
+        <version>4.3-SNAPSHOT</version>
+        <relativePath>../fortytwo-settings-ui</relativePath>
+    </parent>
+
+    <artifactId>fortytwo-ui-war</artifactId>
+    <packaging>war</packaging>
+    <description>Project which creates the final war-file</description>
+
+    <dependencies>
+        <!-- Dependency on the Frontend module -->
+        <dependency>
+            <groupId>com.arvato-systems.t9t</groupId>
+            <artifactId>fortytwo-screens-ui</artifactId>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>com.arvato-systems.t9t</groupId>
+            <artifactId>fortytwo-base-ui</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>fortytwo-ui</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <fileNameMapping>no-version</fileNameMapping>
+                    <attachClasses>true</attachClasses>
+                    <classesClassifier>classes</classesClassifier>
+                    <webResources>
+                        <resource>
+                            <directory>src/main/webapp</directory>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
