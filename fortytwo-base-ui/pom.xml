@@ -19,6 +19,35 @@
                 <filtering>false</filtering>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <header>APACHE-2.txt</header>
+                    <mapping>
+                        <java>PHP</java>
+                     </mapping>
+                     <properties>
+                         <owner>Arvato Systems GmbH</owner>
+                         <project.inceptionYear>2012 - 2018</project.inceptionYear>
+                      </properties>
+                     <excludes>
+                        <exclude>src/main/resources/**</exclude>
+                        <exclude>**/JndiLdapRealm.java</exclude>
+                        <exclude>**/pom.xml</exclude>
+                     </excludes>
+                </configuration>
+                <executions>
+                     <execution>
+                         <goals>
+                             <goal>format</goal>
+                         </goals>
+                     </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
 
     <dependencies>
@@ -61,5 +90,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>
