@@ -17,10 +17,11 @@ package com.arvatosystems.t9t.components.tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.zkoss.bind.annotation.AfterCompose;
 import org.zkoss.bind.annotation.BindingParam;
@@ -41,20 +42,21 @@ import org.zkoss.zul.Listitem;
 import org.zkoss.zul.ListitemRenderer;
 import org.zkoss.zul.Window;
 
-import com.arvatosystems.t9t.tfi.web.ApplicationSession;
 import com.arvatosystems.t9t.base.IGridConfigContainer;
 import com.arvatosystems.t9t.base.uiprefs.UIGridPreferences;
+import com.arvatosystems.t9t.tfi.web.ApplicationSession;
 
 import de.jpaw.bonaparte.pojos.ui.UIColumnConfiguration;
+import de.jpaw.bonaparte.pojos.ui.UIMeta;
 
 public class EditGridViewModel {
 
     protected Listbox editGridListBox;
     private Window windowComponent = null;
-    private UIGridPreferences uiGridPreferences = null;
-    private Set<String> currentGrid = null;
+    private List<String> currentGrid = null;
     private Pair<List<String>, List<String>> addRemovePair = null;
     private final ApplicationSession session = ApplicationSession.get();
+    private List<UIColumnConfiguration> columns = null;
 
     @Wire("#editListBox")
     Listbox listbox;
@@ -66,13 +68,64 @@ public class EditGridViewModel {
 
         windowComponent = (Window) component.getRoot();
         if (initParams != null && initParams.get("gridId") != null) {
-            uiGridPreferences = IGridConfigContainer.GRID_CONFIG_REGISTRY.get(initParams.get("gridId"));
+            UIGridPreferences uiGridPreferences = IGridConfigContainer.GRID_CONFIG_REGISTRY
+                    .get(initParams.get("gridId"));
+            Set<String> objectsToExclude = new HashSet<>();
+            columns = new ArrayList<>(uiGridPreferences.getColumns().size());
+            for (UIColumnConfiguration column : uiGridPreferences.getColumns()) {
+                if (column.getFieldName().contains("orderItems")) {
+                    columns.size();
+                }
+
+                if (isColumnAllowed(column, objectsToExclude)) {
+                    columns.add(column);
+                }
+            }
 
             if (initParams.get("currentGridList") != null) {
-                currentGrid = ((List<String>) initParams.get("currentGridList")).stream().collect(Collectors.toSet());
+                currentGrid = new ArrayList<>((List<String>) initParams.get("currentGridList"));
+            }
+        }
+    }
+
+    /**
+     * To determine whether the column allowed for user to use on the grid
+     * @param column
+     * @param objectsToExclude
+     * @return
+     */
+    private boolean isColumnAllowed(UIColumnConfiguration column, Set<String> objectsToExclude) {
+        // exclude those are a list and it is not dynGrid
+        for (String s : objectsToExclude) {
+            if (column.getFieldName().startsWith(s)) {
+                return false;
             }
         }
 
+        UIMeta meta = column.getMeta();
+        boolean isList = meta.getIsList() == null ? false : meta.getIsList();
+
+        // exclude column that has no meta and dataCategory == OBJECT to avoid invalid
+        // columns being rendered in the grid
+        if (meta == null || meta.getDataCategory().equals("OBJECT")) {
+            if (isList && !isDynField(meta)) {
+                objectsToExclude.add(column.getFieldName());
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Convenient method to check if the meta contain of dynGrid property.
+     *
+     * @param meta
+     * @return
+     */
+    public boolean isDynField(UIMeta meta) {
+        final Map<String, String> props = meta.getFieldProperties();
+        return props != null && props.get("dynGrid") != null;
     }
 
     @Command
@@ -93,7 +146,7 @@ public class EditGridViewModel {
         }
 
         for (Listitem listItem : selectedItems) {
-            UIColumnConfiguration uiColumnConfiguration = uiGridPreferences.getColumns().get(listItem.getIndex());
+            UIColumnConfiguration uiColumnConfiguration = columns.get(listItem.getIndex());
 
             if (listItem.isSelected()) {
                 if (!currentGrid.contains(uiColumnConfiguration.getFieldName())) {
@@ -115,7 +168,7 @@ public class EditGridViewModel {
         Selectors.wireComponents(view, this, false);
 
         List<String> allAvailableFieldNames = new LinkedList<>();
-        uiGridPreferences.getColumns().stream().forEach(uiColumns->{allAvailableFieldNames.add(uiColumns.getFieldName());});
+        columns.stream().forEach(uiColumns->{allAvailableFieldNames.add(uiColumns.getFieldName());});
         listbox.setItemRenderer(new ListitemRenderer<String>() {
             @Override
             public void render(Listitem item, String data, int index) throws Exception {
@@ -136,19 +189,5 @@ public class EditGridViewModel {
         });
     }
 
-    public UIGridPreferences getUiGridPreferences() {
-        return uiGridPreferences;
-    }
 
-    public void setUiGridPreferences(UIGridPreferences uiGridPreferences) {
-        this.uiGridPreferences = uiGridPreferences;
-    }
-
-    public Set<String> getCurrentGrid() {
-        return currentGrid;
-    }
-
-    public void setCurrentGrid(Set<String> currentGrid) {
-        this.currentGrid = currentGrid;
-    }
 }

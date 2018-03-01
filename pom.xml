@@ -29,4 +29,12 @@
         <module>fortytwo-ui-war</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>ZKEE</id>
+            <modules>
+                <module>fortytwo-base-ee</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>

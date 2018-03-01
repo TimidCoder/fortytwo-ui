@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.arvatosystems.t9t.component.datafields;
+package com.arvatosystems.t9t.component.datafields.ee;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +28,8 @@ import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zkmax.zul.Chosenbox;
 import org.zkoss.zul.ListModelList;
 
+import com.arvatosystems.t9t.component.datafields.AbstractCoreDataField;
+import com.arvatosystems.t9t.component.datafields.DataFieldParameters;
 import com.arvatosystems.t9t.tfi.model.bean.ComboBoxItem2;
 
 import de.jpaw.bonaparte.pojos.meta.AlphanumericEnumSetDataItem;

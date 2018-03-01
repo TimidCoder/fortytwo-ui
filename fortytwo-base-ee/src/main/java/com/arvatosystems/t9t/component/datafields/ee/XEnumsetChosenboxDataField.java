@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.arvatosystems.t9t.component.datafields;
+package com.arvatosystems.t9t.component.datafields.ee;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 import org.zkoss.zkmax.zul.Chosenbox;
 import org.zkoss.zul.ListModelList;
 
+import com.arvatosystems.t9t.component.datafields.AbstractCoreDataField;
+import com.arvatosystems.t9t.component.datafields.DataFieldParameters;
 import com.arvatosystems.t9t.tfi.model.bean.ComboBoxItem2;
 
 import de.jpaw.bonaparte.pojos.meta.XEnumDefinition;
@@ -37,7 +39,7 @@ import de.jpaw.enums.AbstractXEnumBase;
 import de.jpaw.enums.XEnumFactory;
 import de.jpaw.util.ExceptionUtil;
 
-/** DataField for XEnumsets, using a textbox. Suitable for Xenums with single-character tokens. */
+/** DataField for XEnumsets, using the ZK EE Chosenbox. Suitable for Xenums with single-character tokens. */
 public class XEnumsetChosenboxDataField<E extends AbstractXEnumBase<E>, S extends AbstractStringXEnumSet<E>> extends AbstractCoreDataField<Chosenbox, S> {
     private static final Logger LOGGER = LoggerFactory.getLogger(XEnumsetChosenboxDataField.class);
     protected final Chosenbox c = new Chosenbox();

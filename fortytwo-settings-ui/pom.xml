@@ -100,23 +100,6 @@
             <artifactId>zel</artifactId>
         </dependency>
 
-        <!-- PE & EE requirements -->
-        <!-- zkex is a dependency of zkmax. It must be listed explicitly and before zkmax because jasper should be excluded -->
-        <dependency>
-            <groupId>org.zkoss.zk</groupId>
-            <artifactId>zkex</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.sf.jasperreports</groupId>
-                    <artifactId>jasperreports</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- zkmax is required for CardLayout (only in ApplicationViewModel class) -->
-        <dependency>
-            <groupId>org.zkoss.zk</groupId>
-            <artifactId>zkmax</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>

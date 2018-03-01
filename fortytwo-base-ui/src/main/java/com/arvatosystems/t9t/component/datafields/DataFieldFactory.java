@@ -40,6 +40,20 @@ import de.jpaw.dp.Singleton;
 public class DataFieldFactory implements IDataFieldFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataFieldFactory.class);
 
+    // ZK edition specific data fields
+    // ZK standard edition implementation
+    protected IDataField createEnumsetNumDataField(final DataFieldParameters params, String enumDtoRestrictions) {
+        return null;
+    }
+
+    protected IDataField createEnumsetAlphaDataField(final DataFieldParameters params, String enumDtoRestrictions) {
+        return null;
+    }
+
+    protected IDataField createXenumsetDataField(final DataFieldParameters params, String enumDtoRestrictions) {
+        return new XEnumsetTextboxDataField(params);
+    }
+
     @Override
     public IDataField createField(final DataFieldParameters params, final CrudViewModel<BonaPortable, TrackingBase> crudViewModel) {
         try {
@@ -119,9 +133,9 @@ public class DataFieldFactory implements IDataFieldFactory {
                     LOGGER.debug("detected special Permissionset type for field {}", path);
                     return new PermissionsetDataField(params);
                 }
-                return new EnumsetDataField(params, enumDtoRestrictions);
+                return createEnumsetNumDataField(params, enumDtoRestrictions);  // ZK edition specific widget
             case ENUMSETALPHA:
-                return new EnumsetDataField(params, enumDtoRestrictions);
+                return createEnumsetAlphaDataField(params, enumDtoRestrictions);  // ZK edition specific widget
             case MISC:
                 switch (javaType) {
                 case "boolean":
@@ -177,8 +191,7 @@ public class DataFieldFactory implements IDataFieldFactory {
             case XENUM:
                 return new XenumDataField(params, enumDtoRestrictions);
             case XENUMSET:
-                // return new XEnumsetTextboxDataField(params);
-                return new XEnumsetChosenboxDataField(params, enumDtoRestrictions);
+                return createXenumsetDataField(params, enumDtoRestrictions);  // ZK edition specific widget
             default:
                 break;
             }
