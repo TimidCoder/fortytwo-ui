@@ -17,11 +17,7 @@
     <window id="main" title="${labels.login.version} ${labels.version}" width="440px" border="normal" mode="overlapped" position="center,center"
         apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.arvatosystems.t9t.tfi.viewmodel.TenantSelectionViewModel' , isInitialTenant=!isCancelClose)" visible="@load(vm.visible)">
         <style src="/css/login.css" />
-        <style>
-            body {
-                background: #e5e5e5;
-            }
-        </style>
+        <style src="/css/body.css" />
 
         <div class="form">
             <grid class="grid">

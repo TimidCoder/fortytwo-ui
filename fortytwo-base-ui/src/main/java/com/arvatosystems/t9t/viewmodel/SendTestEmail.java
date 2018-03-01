@@ -36,7 +36,6 @@ public class SendTestEmail extends ModuleConfigVM<EmailModuleCfgDTO> {
         modal.setMode(Mode.MODAL);
         modal.setClientAttribute("noautofocus", "true");
     }
-    
+
 
 }
-

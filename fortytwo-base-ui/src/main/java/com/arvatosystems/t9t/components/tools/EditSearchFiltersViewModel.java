@@ -78,7 +78,7 @@ public class EditSearchFiltersViewModel {
             for (UIColumnConfiguration column : columns) {
                 //only allow root level fields of main dto && binary: not allowed at all
                 if ((!isFieldWithinLevelOfMainDTO(column, 0) && activeUIFilterMap.get(column.getFieldName()) == null) ||
-                        column.getMeta().getDataType().equals("binary")) {
+                        column.getMeta() == null || column.getMeta().getDataType().equals("binary")) {
                     continue;
                 }
 
@@ -195,20 +195,23 @@ public class EditSearchFiltersViewModel {
      * filter type. Returns false, if less than one search filter is active.
      */
     private boolean validate() {
+        //reset the counter and recalculate isSelectedCounter at validation
+        isSelectedCounter = 0;
+        this.setDropDownMissing(false);
+        this.setSelectionEmpty(false);
+
+        for (SearchFilterRowVM row : this.searchFiltersVM) {
+            if (row.getSelected() && (row.getCurrentSelection() == null || row.getCurrentSelection().equals(""))) {
+                this.setDropDownMissing(true);
+            }
+            isSelectedCounter++;
+        }
+
         if (this.isSelectedCounter == 0) {
             this.setSelectionEmpty(true);
-            return false;
-        } else {
-            this.setSelectionEmpty(false);
         }
-        for (SearchFilterRowVM row : this.searchFiltersVM) {
-            if (row.getSelected() && row.getCurrentSelection().equals("")) {
-                this.setDropDownMissing(true);
-                return false;
-            }
-        }
-        this.setDropDownMissing(false);
-        return true;
+
+        return !(this.dropDownMissing || this.selectionEmpty);
     }
 
     @Command
@@ -257,11 +260,6 @@ public class EditSearchFiltersViewModel {
     @NotifyChange({ "disableSaveButton", "selectionEmpty", "dropDownMissing" })
     @Command
     public void onChecked(@BindingParam("isChecked") boolean isChecked) {
-        if (isChecked) {
-            this.isSelectedCounter++;
-        } else if (this.isSelectedCounter > 0) {
-            this.isSelectedCounter--;
-        }
         this.setDisableSaveButton(!this.validate());
     }
 

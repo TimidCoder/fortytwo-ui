@@ -10,7 +10,8 @@
     xmlns:w="http://www.zkoss.org/2005/zk/client">
 
     <style src="/css/login.css" />
-    <style>body { background: #e5e5e5; }</style>
+    <style src="/css/screen.css" />
+    <style src="/css/body.css" />
     <h:script>
         zk.afterMount(function() {
              zkbind.$('$main').command('realTimezone', { tzid: Intl.DateTimeFormat().resolvedOptions().timeZone } );
@@ -94,9 +95,9 @@
 
                 <row if="${not empty requestScope.loginFailure}">
                     <cell colspan="2">
-                        <label style="color:red" value="${l:i18nLabel('err.login.failed')}" />
+                        <label sclass="z-color-red" value="${l:i18nLabel('err.login.failed')}" />
                         <!--
-                        <html style="color:red">
+                        <html sclass="z-color-red">
                             ${requestScope.loginFailure}
                         </html>
                          -->
@@ -104,7 +105,7 @@
                 </row>
                 <row height="1px" visible="false">
                  <cell colspan="2" height="1px" visible="false">
-                   <label visible="false" style="color:transparent" value="ZK Version : ${desktop.webApp.version} - build ${desktop.webApp.build}"/>
+                   <label visible="false" sclass="z-color-transparent" value="ZK Version : ${desktop.webApp.version} - build ${desktop.webApp.build}"/>
                  </cell>
               </row>
             </rows>

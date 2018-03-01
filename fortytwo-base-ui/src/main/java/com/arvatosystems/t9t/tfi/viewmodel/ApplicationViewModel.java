@@ -38,7 +38,8 @@ import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.event.KeyEvent;
-import org.zkoss.zkmax.zul.Cardlayout;
+import org.zkoss.zul.Panel;
+import org.zkoss.zul.Panelchildren;
 
 import com.arvatosystems.t9t.tfi.general.ApplicationUtil;
 import com.arvatosystems.t9t.tfi.general.Constants;
@@ -69,9 +70,10 @@ public class ApplicationViewModel {
     private String userInfo;
     private NaviGroupingViewModel naviGroupingViewModel = null;
     private Object selected;
-    private Map<String, Integer> naviContentMap = new HashMap<String, Integer>();
+    private Map<String, Panelchildren> naviContentMap = new HashMap<String, Panelchildren>();
     private boolean  previouslyCachingTypeWasCreateWithoutCaching=false;
-    private Cardlayout contentCard;
+
+    private Panel panel;
     private String whenLastLoggedIn;
     private Long pwdExpiresInDays = null;
     private Integer numberOfIncorrentAttempts;
@@ -122,7 +124,7 @@ public class ApplicationViewModel {
             as.readMenu();
 
             //Reset all screens in hash for each new reloading the menus
-            /*FT-808*/  naviContentMap = new HashMap<String, Integer>();
+            /*FT-808*/  naviContentMap = new HashMap<String, Panelchildren>();
             //          paramMap = new HashMap<String, Object>();
         }
     }
@@ -270,13 +272,12 @@ public class ApplicationViewModel {
         createComponents(navi, null, Constants.Application.CachingType.GET_CACHED);
     }
 
-    public final void createComponents(Navi navi, Map<String, Object> params, /*boolean isCached*/Constants.Application.CachingType CachingType) {
+    public final void createComponents(Navi navi, Map<String, Object> params, /*boolean isCached*/Constants.Application.CachingType cachingType) {
 
+        panel.getChildren().clear();
 
-
-        // if (!navi.getLink().equals("screens/public/logout.zul")) {
-        if (naviContentMap.isEmpty()) {
-            contentCard.getChildren().clear();
+        if(previouslyCachingTypeWasCreateWithoutCaching) {
+            naviContentMap.clear();
         }
 
         as.setRequestParams(params);
@@ -287,95 +288,45 @@ public class ApplicationViewModel {
 
         String key = navi.getNaviId();
 
-        //      // store params into map if the map is not contains the key or not equals to GET_CACHED
-        //      if (!paramMap.containsKey(key) || !Constants.Application.CachingType.GET_CACHED.equals(CachingType)) {
-        //          paramMap.put(key, params);
-        //      }
-        //
-        //      ApplicationSession.get().setRequestParams(paramMap.get(key));
-
         if (previouslyCachingTypeWasCreateWithoutCaching) {
-            contentCard.removeChild(contentCard.getLastChild());
+            panel.getChildren().clear();
             previouslyCachingTypeWasCreateWithoutCaching=false;
         }
 
-        if (contentCard != null) {
-            LOGGER.debug("--------------------------------------------");
-            int i=0;
-            for (Component c : contentCard.getChildren()) {
-                LOGGER.debug("----> {} {} {}",i++, c.getId(), c.hashCode());
-            }
-        }
-
-
         if (!naviContentMap.containsKey(key) ||
-                (CachingType==Constants.Application.CachingType.CREATE_AND_CACH) ||
-                (CachingType==Constants.Application.CachingType.CREATE_WITHOUT_CACHING)) {
+                (cachingType==Constants.Application.CachingType.CREATE_AND_CACH) ||
+                (cachingType==Constants.Application.CachingType.CREATE_WITHOUT_CACHING)) {
 
-            Component previouslyCached = null;
-            if ( CachingType!=Constants.Application.CachingType.CREATE_WITHOUT_CACHING) {
-                for (Component c : contentCard.getChildren()) {
-                    if (key.equals(c.getId())) {
-                        previouslyCached = c;
-                    }
-                }
-                if (previouslyCached != null) {
-                    String removalKey = previouslyCached.getId();
-                    contentCard.removeChild(previouslyCached);
-
-                    int synchronizeIndex = naviContentMap.get(removalKey) + 1;
-                    while (synchronizeIndex < naviContentMap.size()) {
-                        for (String findKey : naviContentMap.keySet()) {
-                            if (synchronizeIndex == naviContentMap.get(findKey)) {
-                                naviContentMap.put(findKey, synchronizeIndex - 1);
-                                synchronizeIndex++;
-                            }
-                        }
-                    }
-                    naviContentMap.remove(removalKey);
-                }
+            if (cachingType != Constants.Application.CachingType.CREATE_WITHOUT_CACHING) {
+                naviContentMap.remove(key); // clear the content map
             }
 
-
-            Component card = Executions.createComponents(navi.getLink(), null,  map);
-            if ( CachingType==Constants.Application.CachingType.CREATE_WITHOUT_CACHING) {
-                card.setId(key+"_"+Constants.Application.CachingType.CREATE_WITHOUT_CACHING);
+            Component content = Executions.createComponents(navi.getLink(), null,  map);
+            Panelchildren panelChildren = new Panelchildren();
+            if ( cachingType==Constants.Application.CachingType.CREATE_WITHOUT_CACHING) {
+                content.setId(key+"_"+Constants.Application.CachingType.CREATE_WITHOUT_CACHING);
+                panelChildren.setId(key + "_" + Constants.Application.CachingType.CREATE_WITHOUT_CACHING);
             } else {
-                card.setId(key);
+                content.setId(key);
+                panelChildren.setId(key);
             }
-            for (Component c : contentCard.getChildren()) {
-                c.setVisible(false);
-            }
-            contentCard.appendChild(card);
 
-            if (CachingType==Constants.Application.CachingType.CREATE_WITHOUT_CACHING) {
+            panelChildren.appendChild(content);
+            panel.appendChild(panelChildren);
+
+            if (cachingType == Constants.Application.CachingType.CREATE_WITHOUT_CACHING) {
                 previouslyCachingTypeWasCreateWithoutCaching= true;
-                contentCard.setSelectedIndex(naviContentMap.size());
             }else{
-                naviContentMap.put(key, naviContentMap.size());
-                contentCard.setSelectedIndex(naviContentMap.size() - 1);
+                naviContentMap.put(key, panelChildren);
             }
-            // Comment the following code to disable the card layout effects
-            //contentCard.invalidate();
 
         } else {
-            for (Component c : contentCard.getChildren()) {
-                if (!key.equals(c.getId())) {
-                    c.setVisible(false);
-                } else {
-                    c.setVisible(true);
-                }
-            }
-            contentCard.setSelectedIndex(naviContentMap.get(key));
-            // Comment the following code to disable the card layout effects
-            //contentCard.invalidate();
-            // set the focus to the first input field in the screen
-            contentCard.setFocus(true);
+            panel.getChildren().clear();
+            panel.appendChild(naviContentMap.get(key));
+            panel.setFocus(true);
         }
 
-        LOGGER.debug("----> {} {} {}","x", contentCard.getLastChild().getId(), contentCard.getLastChild().hashCode());
-
-        // }
+        LOGGER.debug("----> {} {} {}","x", panel.getLastChild().getId(), panel.getLastChild().hashCode());
     }
     /*
      * @GlobalCommand("createLinkComponents") public final void
@@ -497,9 +448,9 @@ public class ApplicationViewModel {
      *            the contentDiv to set
      */
     @Command
-    public final void setContentCard(
-            @BindingParam("contentCard") Cardlayout contentCard) {
-        this.contentCard = contentCard;
+    public final void setPanel(
+            @BindingParam("panel") Panel panel) {
+        this.panel = panel;
 
         if (this.selected == null) {
             // initial set selected to the first item

@@ -406,3 +406,38 @@ td.z-listcell .z-listcell-content {
 .z-warn-bg {
     background: #FFFFE0 none;
 }
+
+.z-color-red {
+    color: red !important;
+}
+
+.z-color-transparent {
+    color: transparent !important;
+}
+
+.z-row-style {
+    border: 0px !important;
+    background: #cccccc !important;
+    background-color: #cccccc !important;
+}
+
+.z-cell-style {
+    background: #cccccc !important;
+    background-color: #cccccc !important;
+}
+
+.z-grid .z-row-inner, .z-grid .z-cell {
+    background: #fafafa;
+}
+
+.z-panel-body > .z-panelchildren {
+    background: #fafafa;
+}
+
+tr.z-listgroup, div.z-listbox-body .z-listcell {
+    background: #fafafa;
+}
+
+.z-listitem td:last-child {
+    background: #fcfcfc;
+}

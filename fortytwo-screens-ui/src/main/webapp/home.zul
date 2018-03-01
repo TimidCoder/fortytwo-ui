@@ -38,9 +38,9 @@
     <zscript><![CDATA[
     public void onCreateEvent() {
         Map args = new HashMap();
-        args.put("contentCard", contentCard);
+        args.put("panel", panel);
         Binder binder = org.zkoss.bind.impl.BinderUtil.getBinder(mainHome);
-        binder.sendCommand("setContentCard", args);
+        binder.sendCommand("setPanel", args);
         checkDisplayOrder();
     }
 
@@ -70,14 +70,14 @@
                     <rows>
                         <!-- first row has all the images, plus the first line of the user settings -->
                         <row class="theme-bgcolor" style="border: 0px">
-                            <cell rowspan="3">
+                            <cell rowspan="3" sclass="z-cell-style">
                                 <a href="https://it.arvato.com/de.html">
                                     <image src="/img/logo/company_logo.png" height="55px" style="position:relative;top:0px;" />
                                 </a>
                             </cell>
-                            <cell rowspan="3"/>  <!-- padding -->
-                            <cell rowspan="3"/>  <!-- padding -->
-                            <cell rowspan="3">
+                            <cell sclass="z-cell-style" rowspan="3"/>  <!-- padding -->
+                            <cell sclass="z-cell-style" rowspan="3"/>  <!-- padding -->
+                            <cell rowspan="3" sclass="z-cell-style">
                                 <a href="@load(l:i18nLabel('login.t9tapplication.url'))">
                                     <image src="/img/logo/application_logo.png" height="25px" style="position:relative;top:0px;"/>
                                 </a>
@@ -85,14 +85,14 @@
                                 <label value="${labels.login.version}  ${labels.version}" style="font-weight: bold; font-size: 14px;color: black;line-height: 5px;position:relative;top:4px;" />
 
                             </cell>
-                            <cell rowspan="3">
+                            <cell rowspan="3" sclass="z-cell-style">
                                 <!-- scaling the client logo can give really bad results if the aspect is not as expected. Don't do it, do not provide a height here. Instead use GIMP to scale it as required. -->
                                 <image id="tenantLogo" content="@load(vm.tenantLogo)"  style="position:relative;top:0px;"  />
                              </cell>
-                            <cell>
+                            <cell sclass="z-cell-style">
                                 <label value="${l:i18nLabel('tenant.tenantId')}" tooltiptext="${l:i18nLabel('tenant.tenantId.tooltip.selection')}" />
                             </cell>
-                            <cell style="padding-left:8px">
+                            <cell style="padding-left:8px" sclass="z-cell-style">
                                 <a>
                                     <label value="@load(vm.selectedTenantId)"
                                            style="cursor:hand;cursor:pointer;font-style: italic;"
@@ -114,11 +114,11 @@
                             </cell>
                         </row>
                         <!-- second row has has only column 4 and 5 (user settings). currently changing color for odd row by brute force (FIXME, do by proper CSS)-->
-                        <row class="theme-bgcolor" style="border: 0px; background: #cccccc; background-color: #cccccc;">
-                            <cell align="right" class="theme-bgcolor">
+                        <row  sclass="z-row-style">
+                            <cell sclass="z-cell-style" style="border-right:0px" align="right">
                                 <label value="${l:i18nLabel('login.user')}" tooltiptext="${l:i18nLabel('logout.title')}" />
                             </cell>
-                            <cell class="theme-bgcolor" style="padding-left:8px; background: #cccccc; background-color: #cccccc;" align="left">
+                            <cell sclass="z-cell-style" style="border-left:0px; padding-left:8px;" align="left">
                                 <a>
                                     <label value="@load(vm.getUserId())" id="logoff" apply="com.arvatosystems.t9t.tfi.viewmodel.LogoutViewModel"
                                            tooltiptext="${l:i18nLabel('logout.title')}"
@@ -128,10 +128,10 @@
                         </row>
                         <!-- third row has has only column 4 and 5 (user settings) -->
                         <row class="theme-bgcolor" style="border: 0px">
-                            <cell align="right">
+                            <cell align="right" sclass="z-cell-style">
                                 <label value="${l:i18nLabel('login.language')}" tooltiptext="${l:i18nLabel('login.language.selection')}" />
                             </cell>
-                            <cell>
+                            <cell sclass="z-cell-style">
                                 <div style="width: 90%; height:20px;position:relative;top:-4px;">
                                     <combobox id="languageSelectionCombo" apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.arvatosystems.t9t.tfi.viewmodel.LoginViewModel' , isInitialLogin=false)"
                                         class="languageCombobox" model="@bind(vm.languageListModel)" selectedItem="@bind(vm.selected)" inplace="false"
@@ -186,27 +186,34 @@
 
 
             <center vflex="true" autoscroll="true" xmlns:ca="client/attribute">
-                <cardlayout id="contentCard" width="100%" height="100%" w:onSelect="jq(this).show()" ca:data-animationspeed="0">
-                    <div style="padding-left:10px; padding-top:10px;">
-                        <div class="t9t-info">
-                            <label value="${l:i18nLabel('main.message')}" />
-                            <label value="@load(vm.getUserName())" />
-                            <label> ,</label>
-                            <separator height="1px" />
-                            <label visible="@load(not(vm.whenLastLoggedIn eq null))" value="${l:i18nLabel('main.lastsuccess')}" />
-                            <label value="@load(vm.whenLastLoggedIn)" />
+                <panel id="panel" width="100%" height="100%" >
+                    <panelchildren>
+                        <div style="padding-left:10px; padding-top:10px;">
+                            <div class="t9t-info">
+                                <label value="${l:i18nLabel('main.message')}" />
+                                <label value="@load(vm.getUserName())" />
+                                <label>,</label>
+                                <separator height="1px" />
+                                <label
+                                    visible="@load(not(vm.whenLastLoggedIn eq null))"
+                                    value="${l:i18nLabel('main.lastsuccess')}" />
+                                <label
+                                    value="@load(vm.whenLastLoggedIn)" />
+                            </div>
+                            <div
+                                visible="@load(not(vm.numberOfIncorrentAttempts eq null or vm.numberOfIncorrentAttempts eq '0'))">
+                                <separator height="1px" />
+                                <label value="${l:i18nLabel('main.invalid')}" style="color:red" />
+                                <label value="@load(vm.numberOfIncorrentAttempts)" style="color:red" />
+                            </div>
+                            <div visible="@load(not(vm.pwdExpiresInDays eq null) and vm.pwdExpiresInDays lt 10)">
+                                <separator height="1px" />
+                                <label value="@load(l2:i18nLabel2('main.pwdExpires',vm.pwdExpiresInDays))"
+                                    style="color:red" />
+                            </div>
                         </div>
-                        <div visible="@load(not(vm.numberOfIncorrentAttempts eq null or vm.numberOfIncorrentAttempts eq '0'))">
-                            <separator height="1px" />
-                            <label value="${l:i18nLabel('main.invalid')}" style="color:red" />
-                            <label value="@load(vm.numberOfIncorrentAttempts)" style="color:red" />
-                        </div>
-                        <div visible="@load(not(vm.pwdExpiresInDays eq null) and vm.pwdExpiresInDays lt 10)">
-                            <separator height="1px" />
-                            <label value="@load(l2:i18nLabel2('main.pwdExpires',vm.pwdExpiresInDays))" style="color:red" />
-                        </div>
-                    </div>
-                </cardlayout>
+                    </panelchildren>
+                </panel>
             </center>
 
         </borderlayout>

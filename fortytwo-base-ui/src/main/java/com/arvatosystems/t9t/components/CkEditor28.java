@@ -28,7 +28,7 @@ import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.event.UploadEvent;
-import org.zkoss.zkmax.zul.Dropupload;
+import org.zkoss.zul.Button;
 import org.zkoss.zul.Cell;
 import org.zkoss.zul.Combobox;
 import org.zkoss.zul.Groupbox;
@@ -89,7 +89,7 @@ public class CkEditor28 extends Row {
     private Object deferredValue;
     private int colspan1 = 1;
     private int rows1 = 1;
-    private Dropupload dropUpload;
+    private Button uploadButton;
     private Image anchorToDisplayImage;
     private byte[] mediaDataByteArray;
     private Hbox dropuploadHbox;
@@ -331,19 +331,12 @@ public class CkEditor28 extends Row {
         uploadSection.setHflex("1");
         uploadSection.setParent(dropuploadHbox);
 
-        Label dropuploadText = new Label(as.get().translate("DROP_UPLOAD", "instruction"));
-        dropuploadText.setParent(uploadSection);
-
-        dropUpload = new Dropupload();
-        dropUpload.setHflex("1");
-        dropUpload.setParent(uploadSection);
-        dropUpload.setId(dataFieldId + ".img.e");
-        dropUpload.setMaxsize(100);
-        dropUpload.setDetection("self");
-        dropUpload.setDroppable("true");
-        dropUpload.setAnchor(anchorToDisplayImage);
-        dropUpload.setContent(as.get().translate("DROP_UPLOAD", "drop.here"));
-        dropUpload.addEventListener(Events.ON_UPLOAD, new EventListener<Event>() {
+        uploadButton = new Button();
+        uploadButton.setId(dataFieldId + ".img.e");
+        uploadButton.setParent(uploadSection);
+        uploadButton.setUpload("true");
+        uploadButton.setLabel(as.get().translate("IMAGE_UPLOAD", "uploadImage"));
+        uploadButton.addEventListener(Events.ON_UPLOAD, new EventListener<Event>() {
             @Override
             public void onEvent(Event event) throws Exception {
                 if (event instanceof UploadEvent) {
