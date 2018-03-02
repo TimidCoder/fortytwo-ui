@@ -29,8 +29,8 @@ public class DoubleDataField extends AbstractDataField<Doublebox, Double> {
 
     public DoubleDataField(DataFieldParameters params) {
         super(params);
-        BasicNumericElementaryDataItem cfg = (BasicNumericElementaryDataItem)params.cfg;
-        setConstraints(c, cfg.getIsSigned() ? null : "no negative");
+        BasicNumericElementaryDataItem cfg2 = (BasicNumericElementaryDataItem)params.cfg;
+        setConstraints(c, cfg2.getIsSigned() ? null : "no negative");
         c.setMaxlength(20);
     }
 

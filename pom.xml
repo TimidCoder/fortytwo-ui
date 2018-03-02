@@ -21,19 +21,46 @@
         <packname>-${project.version}-FL-${maven.build.timestamp}</packname>
     </properties>
 
-    <modules>
-        <module>fortytwo-ui-dm</module>
-        <module>fortytwo-settings-ui</module>
-        <module>fortytwo-base-ui</module>
-        <module>fortytwo-screens-ui</module>
-        <module>fortytwo-ui-war</module>
-    </modules>
-
     <profiles>
         <profile>
             <id>ZKEE</id>
+            <activation>
+              <property>
+                <name>!ZKCE</name>
+              </property>
+            </activation>
             <modules>
+                <module>fortytwo-ui-dm</module>
+                <module>fortytwo-settings-ui</module>
+                <module>fortytwo-base-ui</module>
                 <module>fortytwo-base-ee</module>
+                <module>fortytwo-screens-ui</module>
+                <module>fortytwo-ui-war</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>ZKCE</id>
+            <activation>
+              <property>
+                <name>ZKCE</name>
+              </property>
+            </activation>
+            <!-- required for CKEZ if ZK EE is not available. -->
+            <repositories>
+                <repository>
+                    <id>ZK CE</id>
+                    <name>ZK CE Repository</name>
+                    <url>http://mavensync.zkoss.org/maven2</url>
+                </repository>
+            </repositories>
+
+            <modules>
+                <module>fortytwo-ui-dm</module>
+                <module>fortytwo-settings-ui</module>
+                <module>fortytwo-base-ui</module>
+                <module>fortytwo-screens-ui</module>
+                <module>fortytwo-ui-war</module>
             </modules>
         </profile>
     </profiles>

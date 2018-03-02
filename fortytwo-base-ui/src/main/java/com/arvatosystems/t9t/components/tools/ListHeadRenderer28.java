@@ -113,6 +113,8 @@ public class ListHeadRenderer28 {
                 FieldDefinition meta = FieldGetter.getFieldDefinitionForPathname(bclass.getMetaData(), fieldname);
                 // check if this is a special dynamic width column
                 isDynGridColumn = defaultListItemRenderer.isDynField(meta);
+                String fieldNoDdl = fieldname.concat(".noDDL");
+                isUnsortable = (isUnsortable || bclass.getPropertyMap().containsKey(fieldNoDdl));
             } catch (ApplicationException ue) {
                 LOGGER.warn("Could not determine field definition for {}", fieldname);
             }

@@ -41,7 +41,7 @@ public class XEnumsetTextboxDataField<E extends AbstractXEnumBase<E>, S extends 
         return false;  // Xenumsets are never empty in the sense they require contents
     }
 
-    public XEnumsetTextboxDataField(DataFieldParameters params) {
+    public XEnumsetTextboxDataField(DataFieldParameters params, String enumDtoRestrictions) {
         super(params);
         XEnumSetDataItem xdi = (XEnumSetDataItem)params.cfg;
         xesd = xdi.getBaseXEnumset();

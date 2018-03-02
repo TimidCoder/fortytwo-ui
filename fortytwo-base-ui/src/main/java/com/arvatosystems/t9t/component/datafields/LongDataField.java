@@ -29,9 +29,9 @@ public class LongDataField extends AbstractDataField<Longbox, Long> {
 
     public LongDataField(DataFieldParameters params) {
         super(params);
-        BasicNumericElementaryDataItem cfg = (BasicNumericElementaryDataItem)params.cfg;
-        setConstraints(c, cfg.getIsSigned() ? null : "no negative");
-        c.setMaxlength(cfg.getTotalDigits());
+        BasicNumericElementaryDataItem cfg2 = (BasicNumericElementaryDataItem)params.cfg;
+        setConstraints(c, cfg2.getIsSigned() ? null : "no negative");
+        c.setMaxlength(cfg2.getTotalDigits());
     }
 
     @Override

@@ -43,15 +43,15 @@ public class DataFieldFactory implements IDataFieldFactory {
     // ZK edition specific data fields
     // ZK standard edition implementation
     protected IDataField createEnumsetNumDataField(final DataFieldParameters params, String enumDtoRestrictions) {
-        return null;
+        return new EnumsetNumIntboxDataField(params, enumDtoRestrictions);
     }
 
     protected IDataField createEnumsetAlphaDataField(final DataFieldParameters params, String enumDtoRestrictions) {
-        return null;
+        return new EnumsetAlphaTextboxDataField(params, enumDtoRestrictions);
     }
 
     protected IDataField createXenumsetDataField(final DataFieldParameters params, String enumDtoRestrictions) {
-        return new XEnumsetTextboxDataField(params);
+        return new XEnumsetTextboxDataField(params, enumDtoRestrictions);
     }
 
     @Override

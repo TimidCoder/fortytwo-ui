@@ -38,9 +38,9 @@ public class DecimalDataField extends AbstractDataField<Decimalbox, BigDecimal> 
 
     public DecimalDataField(DataFieldParameters params) {
         super(params);
-        NumericElementaryDataItem cfg = (NumericElementaryDataItem)params.cfg;
-        setConstraints(c, cfg.getIsSigned() ? null : "no negative");
-        c.setMaxlength(cfg.getTotalDigits() + 2); // 2 chars for sign and decimal point
+        NumericElementaryDataItem cfg2 = (NumericElementaryDataItem)params.cfg;
+        setConstraints(c, cfg2.getIsSigned() ? null : "no negative");
+        c.setMaxlength(cfg2.getTotalDigits() + 2); // 2 chars for sign and decimal point
         setDecimals(params.decimals);
     }
 
