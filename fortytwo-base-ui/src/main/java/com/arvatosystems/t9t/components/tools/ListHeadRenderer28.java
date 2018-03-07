@@ -306,7 +306,7 @@ public class ListHeadRenderer28 {
             if (permissions.contains(OperationType.ADMIN)) {
                 Menuitem menuitemSaveTenant = new Menuitem(session.translate(PREFIX_GRIDCONFIG28, "saveTenant"));
                 menuitemSaveTenant.addEventListener(Events.ON_CLICK, (Event ev) -> {
-                    gridConfigResolver.save(false);
+                    gridConfigResolver.save(true);
                     gridHasChangedDisable();
                     redrawListbox();
                 });

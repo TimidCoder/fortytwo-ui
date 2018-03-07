@@ -65,6 +65,7 @@ public class Cells228 extends Cells28 {
     private Boolean disabled2 = false;
     private String enums2 = null;
     private String decimals2 = null;
+    private String type2 = null;
 
     public Cells228() {
         super();
@@ -134,10 +135,17 @@ public class Cells228 extends Cells28 {
                 LOGGER.debug("onChange caught for {}, current value is {}", dataFieldId2, getValue());
                     Events.postEvent(new Event(Events.ON_CHANGE, this, null));
             });
-            if ((dataField2 instanceof Textbox) && rows2 > 1) {
+
+            if (dataField2 instanceof Textbox) {
                 Textbox tb = (Textbox)dataField2;
-                tb.setRows(rows2);
-                tb.setMultiline(true);
+                if (rows2 > 1) {
+                     tb.setRows(rows2);
+                     tb.setMultiline(true);
+                }
+
+                if (type2 != null) {
+                    tb.setType(type2);
+                }
             }
         }
         if (form != null)
@@ -210,5 +218,13 @@ public class Cells228 extends Cells28 {
             ((DecimalDataField)idf2).setDecimals(decimals2);  // updates after creation
         else
             LOGGER.warn("Setting decimals2 property for a field which is not a Decimal ({})", dataFieldId2);
+    }
+
+    public String getType2() {
+        return type2;
+    }
+
+    public void setType2(String type2) {
+        this.type2 = type2;
     }
 }

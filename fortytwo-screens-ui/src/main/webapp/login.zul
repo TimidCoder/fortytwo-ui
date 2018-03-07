@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xel-method prefix="l" name="i18nLabel" class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String i18nLabel(String)"?>
-
+<div class="body">
     <window id="main" title="${labels.login.version} ${labels.version}"
     width="400px" apply="org.zkoss.bind.BindComposer"
     viewModel="@id('vm') @init('com.arvatosystems.t9t.tfi.viewmodel.LoginViewModel')"
@@ -11,7 +11,7 @@
 
     <style src="/css/login.css" />
     <style src="/css/screen.css" />
-    <style src="/css/body.css" />
+
     <h:script>
         zk.afterMount(function() {
              zkbind.$('$main').command('realTimezone', { tzid: Intl.DateTimeFormat().resolvedOptions().timeZone } );
@@ -117,3 +117,4 @@
     </h:form>
 
 </window>
+</div>

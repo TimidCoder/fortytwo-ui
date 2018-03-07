@@ -39,6 +39,8 @@ import com.arvatosystems.t9t.base.api.ServiceResponse;
 import com.arvatosystems.t9t.base.output.OutputSessionParameters;
 import com.arvatosystems.t9t.base.search.ReadAllResponse;
 import com.arvatosystems.t9t.base.search.SinkCreatedResponse;
+import com.arvatosystems.t9t.core.CannedRequestRef;
+import com.arvatosystems.t9t.core.request.ExecuteCannedRequest;
 import com.arvatosystems.t9t.io.DataSinkDTO;
 import com.arvatosystems.t9t.io.SinkDTO;
 import com.arvatosystems.t9t.io.SinkRef;
@@ -65,9 +67,8 @@ import de.jpaw.util.ByteArray;
  */
 @Singleton
 public class T9TMessagingDAO implements IT9TMessagingDAO {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(T9TMessagingDAO.class);
-    private T9TRemoteUtils t9tRemoteUtils = Jdp.getRequired(T9TRemoteUtils.class);
+    private final T9TRemoteUtils t9tRemoteUtils = Jdp.getRequired(T9TRemoteUtils.class);
 
     /*
      * (non-Javadoc)
@@ -339,5 +340,20 @@ public class T9TMessagingDAO implements IT9TMessagingDAO {
             md.setZ(meta);
         }
         return md;
+    }
+
+    @Override
+    public Long executeCannedRequest(CannedRequestRef cannedRequestRef) throws ReturnCodeException {
+        LOGGER.debug("executeCannedRequest with ref {}", cannedRequestRef);
+
+        try {
+            ExecuteCannedRequest executeCannedRequest = new ExecuteCannedRequest();;
+            executeCannedRequest.setRequestRef(cannedRequestRef);
+            ServiceResponse serviceResponse = t9tRemoteUtils.executeAndHandle(executeCannedRequest, ServiceResponse.class);
+        } catch (Exception e) {
+            t9tRemoteUtils.returnCodeExceptionHandler("executeCannedRequest", e);
+            return null; // just for the compiler
+        }
+        return null;
     }
 }

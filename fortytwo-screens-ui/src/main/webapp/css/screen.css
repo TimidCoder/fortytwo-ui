@@ -3,6 +3,7 @@ body {
     font-size: small;
     font: normal 12px tahoma, arial, helvetica, sans-serif;
     -webkit-text-size-adjust: none;
+    padding: 0 !important;
 }
 
 .z-listgroup-inner {
@@ -440,4 +441,10 @@ tr.z-listgroup, div.z-listbox-body .z-listcell {
 
 .z-listitem td:last-child {
     background: #fcfcfc;
+}
+
+.body {
+    height: 100%;
+    background: #e5e5e5;
+    padding: 0 5px;
 }

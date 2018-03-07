@@ -169,11 +169,11 @@ public class T9TRemoteUtils {
                     LOGGER.debug("Search on FalseFilter for {} - shortcut to empty result set", requestParameters.ret$PQON());
                     if (requestParameters instanceof SearchRequest) {
                         ReadAllResponse<BonaPortable, TrackingBase> emptyResp = new ReadAllResponse<>();
-                        emptyResp.setDataList(Collections.EMPTY_LIST);
+                        emptyResp.setDataList(Collections.emptyList());
                         return emptyResp;
                     } else {
                         ReadAll28Response<BonaPortable, TrackingBase> emptyResp = new ReadAll28Response<>();
-                        emptyResp.setDataList(Collections.EMPTY_LIST);
+                        emptyResp.setDataList(Collections.emptyList());
                         return emptyResp;
                     }
                 }

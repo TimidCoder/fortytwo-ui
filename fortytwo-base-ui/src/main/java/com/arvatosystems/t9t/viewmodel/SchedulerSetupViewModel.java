@@ -22,7 +22,7 @@ import org.zkoss.bind.annotation.Init;
 
 import com.arvatosystems.t9t.base.entities.FullTrackingWithVersion;
 import com.arvatosystems.t9t.components.crud.CrudSurrogateKeyVM;
-import com.arvatosystems.t9t.services.IT9TReportDAO;
+import com.arvatosystems.t9t.services.IT9TMessagingDAO;
 import com.arvatosystems.t9t.ssm.SchedulerSetupDTO;
 import com.arvatosystems.t9t.ssm.SchedulerSetupRecurrenceType;
 import com.arvatosystems.t9t.ssm.SchedulerSetupRef;
@@ -37,14 +37,14 @@ import de.jpaw.dp.Jdp;
 public class SchedulerSetupViewModel extends CrudSurrogateKeyVM<SchedulerSetupRef, SchedulerSetupDTO, FullTrackingWithVersion> {
     private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerSetupViewModel.class);
 
-    protected final IT9TReportDAO t9tReportDAO = Jdp.getRequired(IT9TReportDAO.class);
+    protected final IT9TMessagingDAO t9tRequestDAO = Jdp.getRequired(IT9TMessagingDAO.class);
 
     @Command
     public final void executeCannedRequest() throws ReturnCodeException {
         if (data == null || data.getRequest() == null)
             return;
         LOGGER.debug("executeCannedRequest with Ref {}", data.getRequest());
-        t9tReportDAO.executeCannedRequest(data.getRequest());
+        t9tRequestDAO.executeCannedRequest(data.getRequest());
     }
 
     @Override

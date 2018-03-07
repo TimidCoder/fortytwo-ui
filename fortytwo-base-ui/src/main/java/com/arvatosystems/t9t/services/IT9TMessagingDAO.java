@@ -25,6 +25,7 @@ import com.arvatosystems.t9t.tfi.services.ReturnCodeException;
 import com.arvatosystems.t9t.base.api.RequestParameters;
 import com.arvatosystems.t9t.base.output.OutputSessionParameters;
 import com.arvatosystems.t9t.base.search.SinkCreatedResponse;
+import com.arvatosystems.t9t.core.CannedRequestRef;
 import com.arvatosystems.t9t.io.DataSinkDTO;
 import com.arvatosystems.t9t.io.SinkDTO;
 import com.arvatosystems.t9t.io.SinkRef;
@@ -101,4 +102,6 @@ public interface IT9TMessagingDAO {
     public void downloadFileAndSave(Long sinkRef) throws ReturnCodeException;
 
     public MediaData getUploadedData(UploadEvent ev) throws IOException;
+
+    public Long executeCannedRequest(CannedRequestRef ref) throws ReturnCodeException;
 }
