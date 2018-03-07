@@ -18,6 +18,7 @@ package com.arvatosystems.t9t.viewmodel;
 import com.arvatosystems.t9t.base.CrudViewModel;
 import com.arvatosystems.t9t.base.IViewModelContainer;
 import com.arvatosystems.t9t.base.misc.Info;
+import com.arvatosystems.t9t.bpmn2.request.CreateDeploymentRequest;
 
 import de.jpaw.bonaparte.pojos.api.TrackingBase;
 
@@ -28,7 +29,12 @@ public class UIOnlyViewModels implements IViewModelContainer {
             Info.BClass.INSTANCE, null, null, null
         );
 
+    public static final CrudViewModel<CreateDeploymentRequest, TrackingBase> CREATE_DEPLOYMENT_VIEW_MODEL =
+            new CrudViewModel<CreateDeploymentRequest, TrackingBase>(
+                    CreateDeploymentRequest.BClass.INSTANCE, null, null, null);
+
     static {
         IViewModelContainer.CRUD_VIEW_MODEL_REGISTRY.putIfAbsent("info",  INFO_VIEW_MODEL);
+        IViewModelContainer.CRUD_VIEW_MODEL_REGISTRY.putIfAbsent("createDeploymentVM", CREATE_DEPLOYMENT_VIEW_MODEL);
     }
 }

@@ -14,7 +14,8 @@ public class ExpiredCredentialsViewModel28 extends ChangePwdViewModel28 {
     @Override
     void init() {
         super.init();
-        if (ApplicationSession.get() != null && ApplicationSession.get().getPasswordExpires() != null && ApplicationSession.get().getPasswordExpires().isAfterNow()) {
+        final ApplicationSession as = ApplicationSession.get();
+        if (as != null && as.getPasswordExpires() != null && as.getPasswordExpires().isAfterNow()) {
             pwdExpired = false;
             postProcessHook();
         }
