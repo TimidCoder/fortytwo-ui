@@ -13,6 +13,7 @@
                               id2="apiKey"               value2="@load(vm.data.apiKey)               @save(vm.data.apiKey,before='commandSave')"/>
                     <cells228 id ="userId"               value ="@load(vm.data.userId)               @save(vm.data.userId,before='commandSave')"
                               id2="languageCode"         value2="@load(vm.data.languageCode)         @save(vm.data.languageCode,before='commandSave')"/>
+                    <cells28  id ="additionalPermissions" value="@load(vm.data.additionalPermissions) @save(vm.data.additionalPermissions,before='commandSave')" colspan1="3"/>
                     <cells228 visible="@load(vm.data.recurrencyType.token eq 'M' or vm.data.recurrencyType.token eq 'Y')"
                               id ="validFrom"            value ="@load(vm.data.validFrom)            @save(vm.data.validFrom,before='commandSave')"
                               id2="validTo"              value2="@load(vm.data.validTo)              @save(vm.data.validTo,before='commandSave')"/>
