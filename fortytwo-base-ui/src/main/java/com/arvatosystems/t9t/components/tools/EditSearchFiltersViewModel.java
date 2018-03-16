@@ -78,7 +78,8 @@ public class EditSearchFiltersViewModel {
             for (UIColumnConfiguration column : columns) {
                 //only allow root level fields of main dto && binary: not allowed at all
                 if ((!isFieldWithinLevelOfMainDTO(column, 0) && activeUIFilterMap.get(column.getFieldName()) == null) ||
-                        column.getMeta() == null || column.getMeta().getDataType().equals("binary")) {
+                        column.getMeta() == null || column.getMeta().getDataType().equals("binary") ||
+                        column.getMeta().getDataCategory().equals("OBJECT") && !isDropdownOrBandbox(column)) {
                     continue;
                 }
 
@@ -212,6 +213,16 @@ public class EditSearchFiltersViewModel {
         }
 
         return !(this.dropDownMissing || this.selectionEmpty);
+    }
+
+    /**
+     * Check if the field has any attribute like dropdown or bandbox
+     *
+     * @param column
+     * @return
+     */
+    private boolean isDropdownOrBandbox(UIColumnConfiguration column) {
+        return hasProperty(column, "dropdown") || hasProperty(column, "bandbox");
     }
 
     @Command

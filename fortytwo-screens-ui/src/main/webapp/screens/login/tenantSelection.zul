@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?init class="com.arvatosystems.t9t.tfi.web.WorkbenchInit" pagename="IGNORE"?>
 <?xel-method prefix="l" name="i18nLabel" class="com.arvatosystems.t9t.tfi.web.ZulUtils" signature="String i18nLabel(String)"?>
-<div class="body">
+
 <zk xmlns:c="client">
     <zscript><![CDATA[
     import com.arvatosystems.t9t.tfi.web.ZulUtils;
@@ -19,7 +19,7 @@
     <window id="main" title="${labels.login.version} ${labels.version}" width="440px" border="normal" mode="overlapped" position="center,center"
         apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('com.arvatosystems.t9t.tfi.viewmodel.TenantSelectionViewModel' , isInitialTenant=!isCancelClose)" visible="@load(vm.visible)">
         <style src="/css/login.css" />
-        <style src="/css/screen.css" />
+        <style src="/css/body.css" />
 
         <div class="form">
             <grid class="grid">
@@ -89,4 +89,3 @@
     </window>
 
 </zk>
-</div>
