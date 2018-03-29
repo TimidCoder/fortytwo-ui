@@ -81,7 +81,7 @@ public abstract class AbstractField<E extends InputElement> implements IField {
         E c = createComponent(suffix);
         c.setId(cfg.getFieldName() + suffix);
         c.setHflex("1");
-        c.setPlaceholder(suffix == "" ? label : session.translate(gridId, fieldname + suffix));
+        c.setPlaceholder(suffix == null || suffix.length() == 0 ? label : session.translate(gridId, fieldname + suffix));
         components.add(c);
     }
 

@@ -250,6 +250,7 @@ public class ApplicationUtil {
         HttpServletResponse resp = (HttpServletResponse)Executions.getCurrent().getNativeResponse();
         Cookie cookie=new Cookie(name, value);
         cookie.setMaxAge(THIRTY_DAYS);
+        cookie.setSecure(true);
         resp.addCookie(cookie);
     }
 }
