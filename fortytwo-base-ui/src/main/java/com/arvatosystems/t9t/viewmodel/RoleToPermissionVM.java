@@ -53,6 +53,6 @@ public class RoleToPermissionVM extends
         super.clearData();
         data = crudViewModel.dtoClass.newInstance();
         data.put$Active(true);  // if the DTO has an active field, create it as active by default
-        data.setPermissionSet(Permissionset.of(OperationType.EXECUTE));  // meaningful default for permision assignment
+        data.setPermissionSet(Permissionset.ofTokens(OperationType.EXECUTE));  // meaningful default for permision assignment
     }
 }
