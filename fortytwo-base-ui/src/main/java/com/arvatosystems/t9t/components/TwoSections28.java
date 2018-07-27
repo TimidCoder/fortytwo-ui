@@ -53,7 +53,7 @@ public class TwoSections28 extends Vlayout implements IGridIdOwner, IPermissionO
     protected CrudViewModel<BonaPortable, TrackingBase> crudViewModel;  // set when gridId is defined
     // protected String gridContext;
     protected boolean isSolr;
-    protected Permissionset permissions = Permissionset.of();
+    protected Permissionset permissions = Permissionset.ofTokens();
     protected SearchFilter fixedFilter = null;
 
 

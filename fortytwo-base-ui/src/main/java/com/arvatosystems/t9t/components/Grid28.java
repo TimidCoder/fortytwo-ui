@@ -96,7 +96,7 @@ public class Grid28 extends Div implements IGridIdOwner, IPermissionOwner {
     public static final String PREFIX_GRID28 = "com.grid";
 
     private final ApplicationSession session = ApplicationSession.get();
-    protected Permissionset permissions = Permissionset.of();
+    protected Permissionset permissions = Permissionset.ofTokens();
 
     long                     totalSize     = 0;
     int                      activePage    = 0;

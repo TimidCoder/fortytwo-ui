@@ -70,7 +70,7 @@ public class Permissions28 extends Groupbox {
         LOGGER.debug("CheckEvent({}, {}) on {}", op, nowChecked, value);
         if (nowChecked) {
             if (value == null) {
-                value = Permissionset.of(op);
+                value = Permissionset.ofTokens(op);
             } else if (!value.contains(op)) {
                 value.add(op);
             } else {
@@ -78,7 +78,7 @@ public class Permissions28 extends Groupbox {
             }
         } else {
             if (value == null) {
-                value = Permissionset.of();
+                value = Permissionset.ofTokens();
             } else if (value.contains(op)) {
                 value.remove(op);
             } else {

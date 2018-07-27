@@ -29,7 +29,7 @@ public class Div28 extends Div implements IPermissionOwner {
     private static final long serialVersionUID = -8089438052410249L;
 
     private final ApplicationSession session = ApplicationSession.get();
-    protected Permissionset permissions = Permissionset.of();
+    protected Permissionset permissions = Permissionset.ofTokens();
     private String gridId;
 
     public Div28() {

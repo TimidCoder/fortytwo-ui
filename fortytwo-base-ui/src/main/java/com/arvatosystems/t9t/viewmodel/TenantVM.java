@@ -31,7 +31,7 @@ public class TenantVM extends CrudSurrogateKeyVM<TenantRef, TenantDTO, FullTrack
 
     protected PermissionsDTO defaultTenantPermissions() {
         PermissionsDTO p = new PermissionsDTO();
-        p.setMinPermissions(Permissionset.of());
+        p.setMinPermissions(Permissionset.ofTokens());
         p.setMaxPermissions(new Permissionset(0xfffff));
         return p;
     }

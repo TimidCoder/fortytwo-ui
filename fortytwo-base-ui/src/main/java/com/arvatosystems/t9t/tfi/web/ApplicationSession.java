@@ -86,7 +86,7 @@ import de.jpaw.util.ExceptionUtil;
  */
 public final class ApplicationSession {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationSession.class);
-    private static final Permissionset NO_PERMISSIONS = Permissionset.of();
+    private static final Permissionset NO_PERMISSIONS = Permissionset.ofTokens();
 
     private static Object                    lock                          = new Object();
     private static final String              SESSION_ATTRIBUTE_APPLICATIOM = "applicationSession";
