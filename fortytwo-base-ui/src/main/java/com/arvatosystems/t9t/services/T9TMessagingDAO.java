@@ -33,7 +33,6 @@ import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.Filedownload;
 
-import com.arvatosystems.t9t.tfi.services.ReturnCodeException;
 import com.arvatosystems.t9t.base.api.RequestParameters;
 import com.arvatosystems.t9t.base.api.ServiceResponse;
 import com.arvatosystems.t9t.base.output.OutputSessionParameters;
@@ -43,13 +42,13 @@ import com.arvatosystems.t9t.core.CannedRequestRef;
 import com.arvatosystems.t9t.core.request.ExecuteCannedRequest;
 import com.arvatosystems.t9t.io.DataSinkDTO;
 import com.arvatosystems.t9t.io.SinkDTO;
-import com.arvatosystems.t9t.io.SinkRef;
 import com.arvatosystems.t9t.io.request.DataSinkTestRequest;
 import com.arvatosystems.t9t.io.request.FileDownloadRequest;
 import com.arvatosystems.t9t.io.request.FileDownloadResponse;
 import com.arvatosystems.t9t.io.request.FileUploadRequest;
 import com.arvatosystems.t9t.rep.ReportParamsRef;
 import com.arvatosystems.t9t.rep.request.RunReportRequest;
+import com.arvatosystems.t9t.tfi.services.ReturnCodeException;
 
 import de.jpaw.bonaparte.api.media.MediaTypeInfo;
 import de.jpaw.bonaparte.pojos.api.media.MediaData;
@@ -114,13 +113,13 @@ public class T9TMessagingDAO implements IT9TMessagingDAO {
      * java.lang.Integer)
      */
     @Override
-    public Media downloadFileRequest(SinkRef sinkRef, Integer chunkSizeInBytes) throws ReturnCodeException {
+    public Media downloadFileRequest(Long sinkRef) throws ReturnCodeException {
 
         try {
             // the offset starts always with 0
             long offset = 0;
-            // set given chunkSizeInBytes as limit or default 120KB
-            int limit = (chunkSizeInBytes != null) && (chunkSizeInBytes.intValue() > 0) ? chunkSizeInBytes.intValue() : 120000;
+            // set given chunkSizeInBytes as limit or default 1 MB
+            int limit = 1024*1024;
             // is needed for the loop breakup
             boolean hasMore = true;
 
@@ -130,7 +129,7 @@ public class T9TMessagingDAO implements IT9TMessagingDAO {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
             while (hasMore) {
-                FileDownloadResponse fileDownloadResponse = execFileDownloadRequest(sinkRef.getObjectRef(), offset, limit);
+                FileDownloadResponse fileDownloadResponse = execFileDownloadRequest(sinkRef, offset, limit);
 
                 // Collect meta data about the file
                 if (name == null) {
@@ -164,6 +163,25 @@ public class T9TMessagingDAO implements IT9TMessagingDAO {
             return null; // just for the compiler
         }
 
+    }
+
+    /** Run an arbitrary request which returns a FileDownloadResponse. */
+    @Override
+    public void downloadFileAndSave(RequestParameters rp) {
+        FileDownloadResponse fileDownloadResponse = t9tRemoteUtils.executeExpectOk(rp, FileDownloadResponse.class);
+        SinkDTO sink = fileDownloadResponse.getSink();
+        String name = sink.getFileOrQueueName();
+        String ctype = "text/plain";
+        String format = "txt";
+        int j = name.lastIndexOf('.');
+        if (j >= 0) {
+            format = name.substring(j + 1);
+            ctype = ContentTypes.getContentType(format);
+        }
+        LOGGER.debug("Download: file-name:{}, format:{}, content-type:{}", name, format, ctype);
+        // Provide data for Media (ZK related stuff)
+        Media media = new AMedia(name, format, ctype, new ByteArrayInputStream(fileDownloadResponse.getData().getBytes()));
+        Filedownload.save(media);
     }
 
     /*
@@ -210,47 +228,6 @@ public class T9TMessagingDAO implements IT9TMessagingDAO {
 
     }
 
-    /** Run an arbitrary request which returns a FileDownloadResponse. */
-    @Override
-    public void downloadSinkAndSave(Long sinkref) {
-        FileDownloadRequest fileDownloadRequest = new FileDownloadRequest();
-        fileDownloadRequest.setSinkRef(sinkref);
-        fileDownloadRequest.setOffset(0);
-        fileDownloadRequest.setLimit(0);
-        FileDownloadResponse fileDownloadResponse = t9tRemoteUtils.executeExpectOk(fileDownloadRequest, FileDownloadResponse.class);
-        SinkDTO sink = fileDownloadResponse.getSink();
-        String name = sink.getFileOrQueueName();
-        String ctype = "text/plain";
-        String format = "txt";
-        int j = name.lastIndexOf('.');
-        if (j >= 0) {
-            format = name.substring(j + 1);
-            ctype = ContentTypes.getContentType(format);
-        }
-        LOGGER.debug("Download: file-name:{}, format:{}, content-type:{}", name, format, ctype);
-        // Provide data for Media (ZK related stuff)
-        Media media = new AMedia(name, format, ctype, new ByteArrayInputStream(fileDownloadResponse.getData().getBytes()));
-        Filedownload.save(media);
-    }
-
-    /** Run an arbitrary request which returns a FileDownloadResponse. */
-    @Override
-    public void downloadFileAndSave(RequestParameters rp) {
-        FileDownloadResponse fileDownloadResponse = t9tRemoteUtils.executeExpectOk(rp, FileDownloadResponse.class);
-        SinkDTO sink = fileDownloadResponse.getSink();
-        String name = sink.getFileOrQueueName();
-        String ctype = "text/plain";
-        String format = "txt";
-        int j = name.lastIndexOf('.');
-        if (j >= 0) {
-            format = name.substring(j + 1);
-            ctype = ContentTypes.getContentType(format);
-        }
-        LOGGER.debug("Download: file-name:{}, format:{}, content-type:{}", name, format, ctype);
-        // Provide data for Media (ZK related stuff)
-        Media media = new AMedia(name, format, ctype, new ByteArrayInputStream(fileDownloadResponse.getData().getBytes()));
-        Filedownload.save(media);
-    }
 
     @Override
     public Long runReportRequest(ReportParamsRef paramsRef) throws ReturnCodeException {
@@ -267,52 +244,10 @@ public class T9TMessagingDAO implements IT9TMessagingDAO {
 
     @Override
     public void downloadFileAndSave(Long sinkRef) throws ReturnCodeException {
-        try {
-            // the offset starts always with 0
-            long offset = 0;
-            // set given chunkSizeInBytes as limit or default 120KB
-            int limit = 120000;
-            // is needed for the loop breakup
-            boolean hasMore = true;
-
-            String name = null;
-            String format = null;
-            String ctype = null;
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-            while (hasMore) {
-                FileDownloadResponse fileDownloadResponse = execFileDownloadRequest(sinkRef, offset, limit);
-
-                // Collect meta data about the file
-                if (name == null) {
-                    SinkDTO sink = fileDownloadResponse.getSink();
-                    name = new File(sink.getFileOrQueueName()).getName();
-                    int j = name.lastIndexOf('.');
-                    if (j >= 0) {
-                        format = name.substring(j + 1);
-                        ctype = ContentTypes.getContentType(format);
-                    }
-                    LOGGER.debug("Download: file-name:{}, format:{}, content-type:{}", name, format, ctype);
-                }
-
-                // Get the data
-                byte[] data = fileDownloadResponse.getData().getBytes();
-                hasMore = fileDownloadResponse.getHasMore();
-                LOGGER.debug("Download: Chunk/content-length:{}. Has-more-chunks:{} (offset:{}/limit:{})", data.length, hasMore, offset, limit);
-
-                // Collect data
-                outputStream.write(data);
-
-                // calculate new offset and limit --> if hasMore == false the calculation has no effect
-                offset = offset + limit;
-            }
-
-            // Provide data for Media (ZK related stuff)
-            Media media = new AMedia(name, format, ctype, new ByteArrayInputStream(outputStream.toByteArray()));
+        Media media = downloadFileRequest(sinkRef);
+        if (media != null) {
             // SEND "remote" file to browser
             Filedownload.save(media);
-        } catch (Exception e) {
-            t9tRemoteUtils.returnCodeExceptionHandler("messaging.bon#FileDownloadRequest", e);
         }
     }
 
@@ -349,7 +284,7 @@ public class T9TMessagingDAO implements IT9TMessagingDAO {
         try {
             ExecuteCannedRequest executeCannedRequest = new ExecuteCannedRequest();;
             executeCannedRequest.setRequestRef(cannedRequestRef);
-            ServiceResponse serviceResponse = t9tRemoteUtils.executeAndHandle(executeCannedRequest, ServiceResponse.class);
+            t9tRemoteUtils.executeAndHandle(executeCannedRequest, ServiceResponse.class);
         } catch (Exception e) {
             t9tRemoteUtils.returnCodeExceptionHandler("executeCannedRequest", e);
             return null; // just for the compiler

@@ -21,17 +21,16 @@ import org.zkoss.util.media.Media;
 import org.zkoss.zk.ui.event.UploadEvent;
 import org.zkoss.zul.Filedownload;
 
-import com.arvatosystems.t9t.tfi.services.ReturnCodeException;
 import com.arvatosystems.t9t.base.api.RequestParameters;
 import com.arvatosystems.t9t.base.output.OutputSessionParameters;
 import com.arvatosystems.t9t.base.search.SinkCreatedResponse;
 import com.arvatosystems.t9t.core.CannedRequestRef;
 import com.arvatosystems.t9t.io.DataSinkDTO;
 import com.arvatosystems.t9t.io.SinkDTO;
-import com.arvatosystems.t9t.io.SinkRef;
 import com.arvatosystems.t9t.io.request.FileDownloadRequest;
 import com.arvatosystems.t9t.io.request.FileDownloadResponse;
 import com.arvatosystems.t9t.rep.ReportParamsRef;
+import com.arvatosystems.t9t.tfi.services.ReturnCodeException;
 
 import de.jpaw.bonaparte.pojos.api.media.MediaData;
 import de.jpaw.util.ByteArray;
@@ -60,7 +59,11 @@ public interface IT9TMessagingDAO {
      * @return the filled Media object.
      * @throws ReturnCodeException
      */
-    public Media downloadFileRequest(SinkRef sinkRef, Integer chunkSizeInBytes) throws ReturnCodeException;
+    public Media downloadFileRequest(Long sinkRef) throws ReturnCodeException;
+
+    /** entry used by the export button of grid28. */
+    public void downloadFileAndSave(Long sinkRef) throws ReturnCodeException;
+    public void downloadFileAndSave(RequestParameters rp);
 
     /**
      * Get from back-end the full Sink object by giving only the reference
@@ -84,11 +87,6 @@ public interface IT9TMessagingDAO {
      */
     public SinkCreatedResponse fileUploadRequest(OutputSessionParameters parameters, ByteArray data) throws ReturnCodeException;
 
-    public void downloadSinkAndSave(Long sinkref);
-
-    /** Run an arbitrary request which returns a FileDownloadResponse. */
-    public void downloadFileAndSave(RequestParameters rp);
-
     /**
      * Just run the RunReportRequest. The request will be filled with ReportParamsRef.<br>
      * The response will be the sink-objectRef {@link SinkCreatedResponse#getSinkRef()}
@@ -97,9 +95,6 @@ public interface IT9TMessagingDAO {
      * @throws ReturnCodeException
      */
     public Long runReportRequest(ReportParamsRef paramsRef) throws ReturnCodeException;
-
-    /** entry used by the export button of grid28. */
-    public void downloadFileAndSave(Long sinkRef) throws ReturnCodeException;
 
     public MediaData getUploadedData(UploadEvent ev) throws IOException;
 

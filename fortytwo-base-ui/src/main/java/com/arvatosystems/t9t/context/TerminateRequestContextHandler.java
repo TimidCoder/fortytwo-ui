@@ -15,10 +15,10 @@
  */
 package com.arvatosystems.t9t.context;
 
+import com.arvatosystems.t9t.base.request.ProcessStatusDTO;
+import com.arvatosystems.t9t.base.request.TerminateProcessRequest;
 import com.arvatosystems.t9t.components.Grid28;
-import com.arvatosystems.t9t.io.SinkDTO;
-import com.arvatosystems.t9t.services.IT9TMessagingDAO;
-import com.arvatosystems.t9t.tfi.services.ReturnCodeException;
+import com.arvatosystems.t9t.services.T9TRemoteUtils;
 
 import de.jpaw.bonaparte.pojos.api.DataWithTracking;
 import de.jpaw.bonaparte.pojos.api.TrackingBase;
@@ -27,18 +27,18 @@ import de.jpaw.dp.Named;
 import de.jpaw.dp.Singleton;
 
 @Singleton
-@Named("sinkSearch.ctx.download")
-public class DownloadContextMenuHandler implements IGridContextMenu<SinkDTO> {
-    protected final IT9TMessagingDAO messagingDAO = Jdp.getRequired(IT9TMessagingDAO.class);
+@Named("processStatus.ctx.terminateRequest")
+public class TerminateRequestContextHandler implements IGridContextMenu<ProcessStatusDTO> {
+    protected final T9TRemoteUtils remoteUtils = Jdp.getRequired(T9TRemoteUtils.class);
 
     @Override
-    public void selected(Grid28 lb, DataWithTracking<SinkDTO, TrackingBase> dwt) {
-        SinkDTO dto = dwt.getData();
-        try {
-            messagingDAO.downloadFileAndSave(dto.getObjectRef());
-        } catch (ReturnCodeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    public void selected(Grid28 lb, DataWithTracking<ProcessStatusDTO, TrackingBase> dwt) {
+        ProcessStatusDTO dto = dwt.getData();
+        // create a termination request and send it to the backend
+        final TerminateProcessRequest rq = new TerminateProcessRequest();
+        rq.setProcessRef(dto.getProcessRef());
+        rq.setTenantId(dto.getTenantId());
+        rq.setThreadId(dto.getThreadId());
+        remoteUtils.executeExpectOk(rq);
     }
 }

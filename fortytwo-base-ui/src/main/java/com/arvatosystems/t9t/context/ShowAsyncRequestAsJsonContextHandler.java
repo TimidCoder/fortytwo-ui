@@ -15,30 +15,30 @@
  */
 package com.arvatosystems.t9t.context;
 
+import com.arvatosystems.t9t.base.misc.Info;
 import com.arvatosystems.t9t.components.Grid28;
-import com.arvatosystems.t9t.io.SinkDTO;
-import com.arvatosystems.t9t.services.IT9TMessagingDAO;
-import com.arvatosystems.t9t.tfi.services.ReturnCodeException;
+import com.arvatosystems.t9t.components.ModalWindows;
+import com.arvatosystems.t9t.io.AsyncMessageDTO;
 
+import de.jpaw.bonaparte.core.BonaPortable;
+import de.jpaw.bonaparte.core.JsonComposer;
 import de.jpaw.bonaparte.pojos.api.DataWithTracking;
 import de.jpaw.bonaparte.pojos.api.TrackingBase;
-import de.jpaw.dp.Jdp;
 import de.jpaw.dp.Named;
 import de.jpaw.dp.Singleton;
 
 @Singleton
-@Named("sinkSearch.ctx.download")
-public class DownloadContextMenuHandler implements IGridContextMenu<SinkDTO> {
-    protected final IT9TMessagingDAO messagingDAO = Jdp.getRequired(IT9TMessagingDAO.class);
+@Named("asyncMessage.ctx.showAsyncRqAsJson")
+public class ShowAsyncRequestAsJsonContextHandler implements IGridContextMenu<AsyncMessageDTO> {
 
     @Override
-    public void selected(Grid28 lb, DataWithTracking<SinkDTO, TrackingBase> dwt) {
-        SinkDTO dto = dwt.getData();
-        try {
-            messagingDAO.downloadFileAndSave(dto.getObjectRef());
-        } catch (ReturnCodeException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    public void selected(Grid28 lb, DataWithTracking<AsyncMessageDTO, TrackingBase> dwt) {
+        AsyncMessageDTO dto = dwt.getData();
+        BonaPortable rp = dto.getPayload();
+        if (rp != null) {
+            Info info = new Info();
+            info.setText(JsonComposer.toJsonString(rp));
+            ModalWindows.runModal("/context/info28.zul", lb.getParent(), info, false, (d) -> {});
         }
     }
 }

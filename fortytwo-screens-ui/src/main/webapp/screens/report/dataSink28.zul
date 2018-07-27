@@ -85,7 +85,8 @@
                                           id2="failureDestPattern"      value2="@bind(vm.data.failureDestPattern)"/>
                                 <cells228 id ="camelExecution"          value ="@bind(vm.data.camelExecution)"
                                           id2="storeImportUsingFilepattern" value2="@bind(vm.data.storeImportUsingFilepattern)"/>
-                                <cells28  id ="checkDuplicateFilename"  value ="@bind(vm.data.checkDuplicateFilename)"/>
+                                <cells228 id ="checkDuplicateFilename"  value ="@bind(vm.data.checkDuplicateFilename)"
+                                          id2="copyToAsyncChannel"      value2="@bind(vm.data.copyToAsyncChannel)"/>
                             </rows>
                         </form28>
                     </tabpanel>

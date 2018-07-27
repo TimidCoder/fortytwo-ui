@@ -4,8 +4,8 @@
  */
 
 CKEDITOR.editorConfig = function(config) {
-	
-	config.htmlEncodeOutput = false;
-	config.entities = false;
-
+    
+    config.htmlEncodeOutput = false;
+    config.entities = false;
+    config.autoParagraph = false;
 }

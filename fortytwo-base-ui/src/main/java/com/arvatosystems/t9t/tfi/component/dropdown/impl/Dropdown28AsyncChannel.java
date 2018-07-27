@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.arvatosystems.t9t.tfi.component.dropdown.voice.impl;
+package com.arvatosystems.t9t.tfi.component.dropdown.impl;
 
 import com.arvatosystems.t9t.tfi.component.dropdown.Dropdown28Db;
-import com.arvatosystems.t9t.voice.VoiceApplicationRef;
+import com.arvatosystems.t9t.io.DataSinkRef;
 
-public class DropdownVoiceApplicationId extends Dropdown28Db<VoiceApplicationRef> {
+public class Dropdown28AsyncChannel extends Dropdown28Db<DataSinkRef> {
+    private static final long serialVersionUID = -178588021619693402L;
 
-    private static final long serialVersionUID = 1976194635257270407L;
-
-    public DropdownVoiceApplicationId() {
-        super("applicationId");
+    public Dropdown28AsyncChannel() {
+        super("asyncChannelId");
     }
 }

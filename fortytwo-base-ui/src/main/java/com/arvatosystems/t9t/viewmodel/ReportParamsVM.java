@@ -79,7 +79,7 @@ public class ReportParamsVM extends CrudSurrogateKeyVM<ReportParamsRef, ReportPa
     public void runReport() throws ReturnCodeException {
         Long sinkRef = messagingDAO.runReportRequest(this.getData());
         if (sinkRef != null) {
-            messagingDAO.downloadSinkAndSave(sinkRef);
+            messagingDAO.downloadFileAndSave(sinkRef);
         }
     }
 }

@@ -13,10 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.arvatosystems.t9t.tfi.component.dropdown.voice;
+package com.arvatosystems.t9t.tfi.component.dropdown;
 
-import com.arvatosystems.t9t.tfi.component.dropdown.Dropdown28Db;
-import com.arvatosystems.t9t.tfi.component.dropdown.IDropdown28DbFactory;
 import com.arvatosystems.t9t.base.search.LeanSearchRequest;
 import com.arvatosystems.t9t.voice.VoiceApplicationDTO;
 import com.arvatosystems.t9t.voice.VoiceApplicationKey;
@@ -28,7 +26,7 @@ import de.jpaw.dp.Singleton;
 
 @Named("applicationId")
 @Singleton
-public class DropdownFactoryVoiceApplicationId  implements IDropdown28DbFactory<VoiceApplicationRef> {
+public class Dropdown28FactoryVoiceApplicationId  implements IDropdown28DbFactory<VoiceApplicationRef> {
 
     @Override
     public String getDropdownId() {
