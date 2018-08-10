@@ -19,9 +19,9 @@ import com.arvatosystems.t9t.base.api.ServiceResponse;
 import com.arvatosystems.t9t.components.Grid28;
 import com.arvatosystems.t9t.msglog.MessageDTO;
 
-import de.jpaw.bonaparte.core.JsonComposer;
-import de.jpaw.bonaparte.pojos.api.TrackingBase;
+import de.jpaw.bonaparte.core.JsonComposerPrettyPrint;
 import de.jpaw.bonaparte.pojos.api.DataWithTracking;
+import de.jpaw.bonaparte.pojos.api.TrackingBase;
 import de.jpaw.dp.Named;
 import de.jpaw.dp.Singleton;
 
@@ -34,7 +34,7 @@ public class ShowResponseAsJsonContextHandler extends AbstractShowParametersCont
         MessageDTO dto = dwt.getData();
         ServiceResponse rp = super.getResponse(dto.getObjectRef());
         if (rp != null) {
-            super.showInModelWindow(lb, JsonComposer.toJsonString(rp), false);
+            super.showInModelWindow(lb, JsonComposerPrettyPrint.toJsonString(rp), false);
         }
     }
 }

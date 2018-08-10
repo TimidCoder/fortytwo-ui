@@ -126,8 +126,14 @@ public class FieldFactory {
             case STRING:
                 if (fieldProperties == null || fieldProperties.isEmpty())  // shortcut: avoid further map lookups
                     return new TextField(fieldname, filter, desc, gridId, session);
-                if (dropdownType != null)
-                    return new DropdownField(fieldname, filter, desc, gridId, session, dropdownType);
+                if (filter.getFilterType() == UIFilterType.EQUALITY) {
+                    // in case of equality, dropdowns are possible
+                    if (dropdownType != null)
+                        return new DropdownField(fieldname, filter, desc, gridId, session, dropdownType);
+                    String qualifierFor = fieldProperties.get("qualifierFor");
+                    if (qualifierFor != null)
+                        return new QualifierSelectionField(fieldname, filter, desc, gridId, session, qualifierFor);
+                }
                 // check for special enumset properties
                 String enumSet = fieldProperties.get("enumset");
                 if (enumSet != null) {

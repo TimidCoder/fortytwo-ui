@@ -86,6 +86,13 @@ public class DataFieldFactory implements IDataFieldFactory {
                     // String based (Currency, Country etc...)
                     return new DropdownBasicDataField(params, dropdownType, factory);
                 }
+                if (fieldProperties != null) {
+                    String qualifierFor = fieldProperties.get("qualifierFor");
+                    if (qualifierFor != null) {
+                        LOGGER.debug("Creating dropdown for qualifier {} for {}", qualifierFor, path);
+                        return new DropdownBasicDataField(params, qualifierFor);
+                    }
+                }
                 return new TextDataField(params);
             case BASICNUMERIC:
                 switch (javaType) {

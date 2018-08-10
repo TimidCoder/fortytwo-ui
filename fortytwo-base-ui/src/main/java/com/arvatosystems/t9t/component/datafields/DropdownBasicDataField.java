@@ -16,6 +16,7 @@
 package com.arvatosystems.t9t.component.datafields;
 
 import com.arvatosystems.t9t.tfi.component.Dropdown28Ext;
+import com.arvatosystems.t9t.tfi.component.dropdown.Dropdown28FactoryForQualifiers;
 import com.arvatosystems.t9t.tfi.component.dropdown.IDropdown28BasicFactory;
 
 /** Prebuilt dropdowns. */
@@ -32,6 +33,12 @@ public class DropdownBasicDataField extends AbstractDataField<Dropdown28Ext, Str
     public DropdownBasicDataField(DataFieldParameters params, String dropdownType, IDropdown28BasicFactory<Dropdown28Ext> dbFactory) {
         super(params);
         c = dbFactory.createInstance();
+        setConstraints(c, null);
+    }
+
+    public DropdownBasicDataField(DataFieldParameters params, String qualifierFor) {
+        super(params);
+        c = Dropdown28FactoryForQualifiers.createInstance(qualifierFor);
         setConstraints(c, null);
     }
 

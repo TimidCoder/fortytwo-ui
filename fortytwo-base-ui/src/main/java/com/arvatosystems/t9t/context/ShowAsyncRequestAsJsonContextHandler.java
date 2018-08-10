@@ -21,7 +21,7 @@ import com.arvatosystems.t9t.components.ModalWindows;
 import com.arvatosystems.t9t.io.AsyncMessageDTO;
 
 import de.jpaw.bonaparte.core.BonaPortable;
-import de.jpaw.bonaparte.core.JsonComposer;
+import de.jpaw.bonaparte.core.JsonComposerPrettyPrint;
 import de.jpaw.bonaparte.pojos.api.DataWithTracking;
 import de.jpaw.bonaparte.pojos.api.TrackingBase;
 import de.jpaw.dp.Named;
@@ -37,7 +37,7 @@ public class ShowAsyncRequestAsJsonContextHandler implements IGridContextMenu<As
         BonaPortable rp = dto.getPayload();
         if (rp != null) {
             Info info = new Info();
-            info.setText(JsonComposer.toJsonString(rp));
+            info.setText(JsonComposerPrettyPrint.toJsonString(rp));
             ModalWindows.runModal("/context/info28.zul", lb.getParent(), info, false, (d) -> {});
         }
     }
