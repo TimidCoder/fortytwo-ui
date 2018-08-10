@@ -41,8 +41,6 @@ public class LoginHelper {
         if (request instanceof HttpServletRequest) {
             HttpServletRequest req = WebUtils.toHttp(request);
 
-            //"/O=arvato Systems GmbH/OU=arvato Systems Group/OU=INCI02@asysoffice.de/CN=Murat Inci"; f
-            //req.getHeader(SSL_CLIENT_S_DN);
             String subjectDNHeader = req.getHeader(SSL_CLIENT_S_DN);
 
             //"SUCCESS";
@@ -83,22 +81,20 @@ public class LoginHelper {
     }
 
     public static void logRequestInfo(ServletRequest request) {
-        if (request instanceof HttpServletRequest) {
+        if (request instanceof HttpServletRequest && LOGGER.isDebugEnabled()) {
             HttpServletRequest req = WebUtils.toHttp(request); // (HttpServletRequest) request;
             Enumeration<String> headerNames = req.getHeaderNames();
 
-            //            LOGGER.debug("Read from Config table: implementationClass:{}, url:{}, system:{}, returnValue:{}", implementationClass, url, system,
-            //                    (implementationClass != null) && (url != null) && (system != null) && (implClass != null));
             LOGGER.debug("=====================================HEADER INFO=====================================");
             while (headerNames.hasMoreElements()) {
 
                 String headerName = headerNames.nextElement();
-                LOGGER.debug("------------------------------ " + headerName + "----------------------");
+                LOGGER.debug("------------------------------ {} ----------------------", headerName);
 
                 Enumeration<String> headers = req.getHeaders(headerName);
                 while (headers.hasMoreElements()) {
                     String headerValue = headers.nextElement();
-                    LOGGER.debug("-->" + headerValue);
+                    LOGGER.debug("--> {}", headerValue);
                 }
 
             }
@@ -109,20 +105,16 @@ public class LoginHelper {
             while (parameterNames.hasMoreElements()) {
 
                 String paramName = parameterNames.nextElement();
-                LOGGER.debug("------------------------------ " + paramName + "----------------------");
+                LOGGER.debug("------------------------------ {} ----------------------", paramName);
 
                 String[] paramValues = req.getParameterValues(paramName);
                 for (int i = 0; i < paramValues.length; i++) {
                     String paramValue = paramValues[i];
-                    LOGGER.debug("-->" + paramValue);
+                    LOGGER.debug("--> {}", paramValue);
                 }
 
             }
              */
-
         }
     }
-
-
-
 }
