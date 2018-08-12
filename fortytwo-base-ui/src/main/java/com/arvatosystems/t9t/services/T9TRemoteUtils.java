@@ -88,6 +88,11 @@ public class T9TRemoteUtils {
         executeExpectOk(requestParameters, ServiceResponse.class);
     }
 
+    public int executeReturnOkCode(RequestParameters requestParameters) throws ServiceResponseException {
+        ServiceResponse resp = executeExpectOk(requestParameters, ServiceResponse.class);
+        return resp.getReturnCode();  // this could be 0 or 1 or 2...
+    }
+
     public void executeIgnoreErr(RequestParameters requestParameters, int errorToIgnore) {
         try {
             ServiceResponse response = execute(requestParameters);
@@ -120,7 +125,7 @@ public class T9TRemoteUtils {
             requestParameters.treeWalkString(new StringConverterEmptyToNull(), true);  // convert empty data to nulls
             requestParameters.validate();
             ServiceResponse response = execute(requestParameters);
-            if (response.getReturnCode() != 0) {
+            if (!ApplicationException.isOk(response.getReturnCode())) {
                 LOGGER.error("Bad return code {} for {}: {} {}",
                         response.getReturnCode(),
                         requestParameters.ret$PQON(),
