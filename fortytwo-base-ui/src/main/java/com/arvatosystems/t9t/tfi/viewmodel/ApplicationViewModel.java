@@ -276,7 +276,7 @@ public class ApplicationViewModel {
 
         panel.getChildren().clear();
 
-//        if(previouslyCachingTypeWasCreateWithoutCaching) {
+//        if (previouslyCachingTypeWasCreateWithoutCaching) {
 //            naviContentMap.clear();
 //        }
 

@@ -61,6 +61,7 @@ public abstract class AbstractBandboxDataField<T> extends AbstractDataField<Band
         LongFilter f = new LongFilter();
         f.setFieldName("objectRef");
         f.setEqualsValue(objectRef);
+        rq.setSearchFilter(f);
         ReadAllResponse res = remoteUtils.executeExpectOk(rq, ReadAllResponse.class);
         if (res.getReturnCode() == 0) {
             if (res.getDataList().size() > 0) {

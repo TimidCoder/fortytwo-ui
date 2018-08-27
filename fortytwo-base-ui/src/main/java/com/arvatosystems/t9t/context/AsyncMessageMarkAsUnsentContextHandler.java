@@ -15,30 +15,34 @@
  */
 package com.arvatosystems.t9t.context;
 
-import com.arvatosystems.t9t.base.misc.Info;
+import com.arvatosystems.t9t.base.output.ExportStatusEnum;
 import com.arvatosystems.t9t.components.Grid28;
-import com.arvatosystems.t9t.components.ModalWindows;
 import com.arvatosystems.t9t.io.AsyncMessageDTO;
+import com.arvatosystems.t9t.io.request.UpdateAsyncMessageStatusRequest;
+import com.arvatosystems.t9t.services.T9TRemoteUtils;
 
-import de.jpaw.bonaparte.core.BonaPortable;
-import de.jpaw.bonaparte.core.JsonComposerPrettyPrint;
 import de.jpaw.bonaparte.pojos.api.DataWithTracking;
 import de.jpaw.bonaparte.pojos.api.TrackingBase;
+import de.jpaw.dp.Jdp;
 import de.jpaw.dp.Named;
 import de.jpaw.dp.Singleton;
 
 @Singleton
-@Named("asyncMessage.ctx.showAsyncRqAsJson")
-public class ShowAsyncRequestAsJsonContextHandler implements IGridContextMenu<AsyncMessageDTO> {
+@Named("asyncMessage.ctx.markAsUnsent")
+public class AsyncMessageMarkAsUnsentContextHandler implements IGridContextMenu<AsyncMessageDTO> {
+    protected final T9TRemoteUtils remoteUtils = Jdp.getRequired(T9TRemoteUtils.class);
+
+    @Override
+    public boolean isEnabled(DataWithTracking<AsyncMessageDTO, TrackingBase> dwt) {
+        return dwt.getData().getStatus() == ExportStatusEnum.RESPONSE_OK;
+    }
 
     @Override
     public void selected(Grid28 lb, DataWithTracking<AsyncMessageDTO, TrackingBase> dwt) {
-        AsyncMessageDTO dto = dwt.getData();
-        BonaPortable rp = dto.getPayload();
-        if (rp != null) {
-            Info info = new Info();
-            info.setText(JsonComposerPrettyPrint.toJsonString(rp));
-            ModalWindows.runModal("/context/info28.zul", lb.getParent(), info, false, (d) -> {});
-        }
+        final AsyncMessageDTO dto = dwt.getData();
+        final UpdateAsyncMessageStatusRequest rq = new UpdateAsyncMessageStatusRequest();
+        rq.setAsyncMessageRef(dto.getObjectRef());
+        rq.setNewStatus(ExportStatusEnum.READY_TO_EXPORT);
+        remoteUtils.executeExpectOk(rq);
     }
 }
