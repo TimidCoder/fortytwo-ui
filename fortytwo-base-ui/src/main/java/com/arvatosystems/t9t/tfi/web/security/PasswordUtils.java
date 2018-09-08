@@ -351,7 +351,7 @@ public class PasswordUtils {
             } catch (NoSuchAlgorithmException e) {
                 // Can't throw an exception from the constructor, but this will get
                 // it logged and tracked
-                new IllegalArgumentException("Error creating randomizer | Can't find random algorithm " + algorithm, e);
+                throw new IllegalArgumentException("Error creating randomizer | Can't find random algorithm " + algorithm, e);
             }
         }
 

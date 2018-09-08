@@ -39,9 +39,9 @@ public class ByteArrayConverter implements IItemConverter<ByteArray> {
             }
         }
         if (lengthToCheck == 32)
-            return "'" + value.getBytes(0, lengthToCheck).toString() + "...";  // partial string
+            return "'" + new String(value.getBytes(0, lengthToCheck)) + "...";  // partial string
         else
-            return "'" + value.getBytes().toString() + "'";  // full string
+            return "'" + new String(value.getBytes()) + "'";  // full string
     }
 
     @Override

@@ -289,18 +289,16 @@ public class CkEditor28 extends Row {
         }
 
         ckEditor = new CKeditor();
-        if (ckEditor != null) {
-            ckEditor.setId(dataFieldId + ".text.e");
-            ckEditor.setHflex("1");
-            ckEditor.setVisible(false);
-            ckEditor.setCustomConfigurationsPath("/js/config/ckeditor.config.js");
+        ckEditor.setId(dataFieldId + ".text.e");
+        ckEditor.setHflex("1");
+        ckEditor.setVisible(false);
+        ckEditor.setCustomConfigurationsPath("/js/config/ckeditor.config.js");
 
-            // also forward the onChange event to allow saving of changed data
-            ckEditor.addEventListener(Events.ON_CHANGE, (ev) -> {
-                LOGGER.debug("onChange caught for {}, current value is {}", getId(), getValue());
-                Events.postEvent(new Event(Events.ON_CHANGE, this, null));
-            });
-        }
+        // also forward the onChange event to allow saving of changed data
+        ckEditor.addEventListener(Events.ON_CHANGE, (ev) -> {
+            LOGGER.debug("onChange caught for {}, current value is {}", getId(), getValue());
+            Events.postEvent(new Event(Events.ON_CHANGE, this, null));
+        });
 
         constructDropUpload();
 

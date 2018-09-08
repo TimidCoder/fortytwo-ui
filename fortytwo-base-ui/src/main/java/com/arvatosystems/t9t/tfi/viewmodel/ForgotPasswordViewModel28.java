@@ -3,6 +3,7 @@ package com.arvatosystems.t9t.tfi.viewmodel;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.Init;
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.util.resource.Labels;
 import org.zkoss.zhtml.Messagebox;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.event.Event;
@@ -14,7 +15,6 @@ import com.arvatosystems.t9t.tfi.general.Constants;
 import com.arvatosystems.t9t.tfi.services.IUserDAO;
 import com.arvatosystems.t9t.tfi.services.ReturnCodeException;
 import com.arvatosystems.t9t.tfi.web.ApplicationSession;
-import com.arvatosystems.t9t.tfi.web.ZulUtils;
 
 import de.jpaw.bonaparte.pojos.api.TrackingBase;
 import de.jpaw.dp.Jdp;
@@ -22,7 +22,7 @@ import de.jpaw.dp.Jdp;
 public class ForgotPasswordViewModel28 extends AbstractViewOnlyVM<ResetPasswordRequest, TrackingBase> {
 
     private final IUserDAO userDAO = Jdp.getRequired(IUserDAO.class);
-    private final String ANONYMOUS_API_KEY = ZulUtils.i18nLabel("anonymous.apikey");
+    private final String ANONYMOUS_API_KEY = Labels.getLabel("anonymous.apikey");
 
     @Init
     void init() {

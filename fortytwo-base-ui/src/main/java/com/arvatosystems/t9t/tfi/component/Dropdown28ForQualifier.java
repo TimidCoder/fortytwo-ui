@@ -22,6 +22,6 @@ public class Dropdown28ForQualifier extends Dropdown28Ext {
 
     public Dropdown28ForQualifier(List<String> allowed) {
         super(allowed);
-        this.setMaxlength(32);
+        this.setMaxlength(36);
     }
 }

@@ -24,6 +24,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zkoss.util.TimeZones;
+import org.zkoss.util.resource.Labels;
 
 import com.arvatosystems.t9t.tfi.general.Constants;
 import com.arvatosystems.t9t.tfi.viewmodel.LoginViewModel;
@@ -157,13 +158,13 @@ public class UserDAO implements IUserDAO {
     public final void changePassword(String oldPassword, String newPassword) throws ReturnCodeException{
         try {
             // Check the new pwd is in valid format
-            PasswordUtils passwordUtils = new PasswordUtils(Integer.valueOf(ZulUtils.i18nLabel("pwd.length")),
-                    Integer.valueOf(ZulUtils.i18nLabel("pwd.lower")), Integer.valueOf(ZulUtils.i18nLabel("pwd.upper")),
-                    Integer.valueOf(ZulUtils.i18nLabel("pwd.digit")), Integer.valueOf(ZulUtils.i18nLabel("pwd.special")),
-                    Boolean.valueOf(ZulUtils.i18nLabel("pwd.checkIsoControl")));
+            PasswordUtils passwordUtils = new PasswordUtils(Integer.valueOf(Labels.getLabel("pwd.length")),
+                    Integer.valueOf(Labels.getLabel("pwd.lower")), Integer.valueOf(Labels.getLabel("pwd.upper")),
+                    Integer.valueOf(Labels.getLabel("pwd.digit")), Integer.valueOf(Labels.getLabel("pwd.special")),
+                    Boolean.valueOf(Labels.getLabel("pwd.checkIsoControl")));
             if (!passwordUtils.verifyPasswordStrength(null, newPassword)) {
                 LOGGER.warn("Error while changing password. Remember that the password should contain upper and lower case characters as well as digits and special characters. "+ passwordUtils.toString());
-                throw new ReturnCodeException(Constants.ErrorCodes.AUTHENTICATION_EXCEPTION, ZulUtils.i18nLabel("err.pwd.requirements"), null);
+                throw new ReturnCodeException(Constants.ErrorCodes.AUTHENTICATION_EXCEPTION, Labels.getLabel("err.pwd.requirements"), null);
             }
             String userId = ApplicationSession.get().getUserId();
             AuthenticationRequest changePasswordRequest = new AuthenticationRequest();

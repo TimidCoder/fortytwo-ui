@@ -27,9 +27,7 @@ public class Dropdown28FactoryForQualifiers {
             final GetQualifiersRequest rq = new GetQualifiersRequest();
             rq.setFullyQualifiedClassName("com.arvatosystems.t9t." + pqon);
             GetQualifiersResponse resp = remote.executeExpectOk(rq, GetQualifiersResponse.class);
-            List<String> model = new ArrayList<String>(resp.getQualifiers());
-            cache.putIfAbsent(pqon, model);
-            values = model;
+            values = cache.computeIfAbsent(pqon, (k) -> new ArrayList<String>(resp.getQualifiers()));
         }
         return new Dropdown28ForQualifier(values);
     }
