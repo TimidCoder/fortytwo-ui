@@ -25,7 +25,10 @@ public class Dropdown28FactoryForQualifiers {
             LOGGER.info("No cached data for qualifiers of {}, asking backend", pqon);
             T9TRemoteUtils remote = Jdp.getRequired(T9TRemoteUtils.class);
             final GetQualifiersRequest rq = new GetQualifiersRequest();
-            rq.setFullyQualifiedClassName("com.arvatosystems.t9t." + pqon);
+            final String [] pqons = pqon.split(",");
+            rq.setFullyQualifiedClassNames(new ArrayList<>(pqons.length));
+            for (String p: pqons)
+                rq.getFullyQualifiedClassNames().add("com.arvatosystems.t9t." + p);
             GetQualifiersResponse resp = remote.executeExpectOk(rq, GetQualifiersResponse.class);
             values = cache.computeIfAbsent(pqon, (k) -> new ArrayList<String>(resp.getQualifiers()));
         }
