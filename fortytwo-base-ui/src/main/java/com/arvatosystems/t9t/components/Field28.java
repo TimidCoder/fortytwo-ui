@@ -32,12 +32,14 @@ import com.arvatosystems.t9t.base.CrudViewModel;
 import com.arvatosystems.t9t.base.FieldMappers;
 import com.arvatosystems.t9t.component.datafields.DataFieldParameters;
 import com.arvatosystems.t9t.component.datafields.DecimalDataField;
+import com.arvatosystems.t9t.component.datafields.GroupedDropdownDataField;
 import com.arvatosystems.t9t.component.datafields.IDataField;
 import com.arvatosystems.t9t.component.ext.IDataFieldFactory;
 import com.arvatosystems.t9t.component.ext.IViewModelOwner;
 
 import de.jpaw.bonaparte.core.BonaPortable;
 import de.jpaw.bonaparte.pojos.api.TrackingBase;
+import de.jpaw.bonaparte.pojos.apiw.Ref;
 import de.jpaw.bonaparte.pojos.meta.FieldDefinition;
 import de.jpaw.bonaparte.util.FieldGetter;
 import de.jpaw.dp.Jdp;
@@ -180,5 +182,12 @@ public class Field28 extends Cell {
             ((DecimalDataField)idf).setDecimals(decimals1);  // updates after creation
         else
             LOGGER.warn("Setting decimals1 property for a field which is not a Decimal");
+    }
+
+    public void setGroup(Object ref) {
+        if (idf instanceof GroupedDropdownDataField) {
+            GroupedDropdownDataField field = (GroupedDropdownDataField) idf;
+            field.setGroup(ref);
+        }
     }
 }

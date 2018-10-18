@@ -227,4 +227,8 @@ public class Cells228 extends Cells28 {
     public void setType2(String type2) {
         this.type2 = type2;
     }
+
+    public void setGroup2(Object group2) {
+        setGroup(idf2, group2);
+    }
 }

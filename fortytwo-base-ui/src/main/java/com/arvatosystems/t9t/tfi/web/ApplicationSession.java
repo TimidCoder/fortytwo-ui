@@ -62,6 +62,9 @@ import com.arvatosystems.t9t.authc.api.TenantDescription;
 import com.arvatosystems.t9t.base.auth.PermissionEntry;
 import com.arvatosystems.t9t.base.auth.PermissionType;
 import com.arvatosystems.t9t.base.search.Description;
+import com.arvatosystems.t9t.base.search.DescriptionList;
+import com.arvatosystems.t9t.base.search.LeanGroupedSearchRequest;
+import com.arvatosystems.t9t.base.search.LeanGroupedSearchResponse;
 import com.arvatosystems.t9t.base.search.LeanSearchRequest;
 import com.arvatosystems.t9t.base.search.LeanSearchResponse;
 import com.arvatosystems.t9t.services.T9TRemoteUtils;
@@ -103,6 +106,8 @@ public final class ApplicationSession {
     private Integer                          numberOfIncorrentAttempts;
     private Cache<String, Map<String, String>> enumTranslationCache = CacheBuilder.newBuilder().build();
     private Cache<String, List<Description>> dropdownDataCache =
+            CacheBuilder.newBuilder().expireAfterWrite(15L, TimeUnit.MINUTES).build();
+    private Cache<String, Map<Long, DescriptionList>> groupedDropdownDataCache = 
             CacheBuilder.newBuilder().expireAfterWrite(15L, TimeUnit.MINUTES).build();
     private final ConcurrentMap<String, Permissionset> permissionCache = new ConcurrentHashMap<>(100);
     private final List<Navi>                 navis = new ArrayList<Navi>();
@@ -218,6 +223,10 @@ public final class ApplicationSession {
     public void invalidateCachedDropDownData(String dropdownId) {
         dropdownDataCache.invalidate(dropdownId);
     }
+    
+    public void invalidateCachedGroupedDropDownData(String dropdownId) {
+        groupedDropdownDataCache.invalidate(dropdownId);
+    }
 
     /** Retrieves (possibly cached) data for a dropdown. Queries the backend if the data
      * is too old or was not queried before in this session.
@@ -235,6 +244,33 @@ public final class ApplicationSession {
         dropdownDataCache.put(dropdownId, resp);  // store for subsequent queries
         return resp;
     }
+    
+    /** Retrieves (possibly cached) data for a grouped dropdown. Queries the backend if the data
+     * is too old or was not queried before in this session.
+     * @param dropdownId
+     * @param rq
+     * @return
+     */
+    public DescriptionList getGroupedDropdownData(String dropdownId, Long group, LeanGroupedSearchRequest rq, boolean clearCached) {
+        if (!clearCached) {
+            Map<Long, DescriptionList> cachedData = groupedDropdownDataCache.getIfPresent(dropdownId);
+            if (cachedData != null) {
+                DescriptionList list =  cachedData.get(group);
+                if (list == null)
+                    return new DescriptionList(Collections.<Description>emptyList());
+                return list;
+            }
+        }
+
+        // not present, query backend
+        LOGGER.info("No valid grouped dropdown data for dropdownId {} group {} in cache, querying backend...", dropdownId, group);
+        Map<Long, DescriptionList> resp = getGroupedDropDownData(rq);
+        groupedDropdownDataCache.put(dropdownId, resp);
+        DescriptionList list = resp.get(group);
+        if (list == null)
+            return new DescriptionList(Collections.<Description>emptyList());
+        return list;
+    }
 
     /** Retrieves data for a dropdown without caching.
      * @param rq
@@ -251,6 +287,24 @@ public final class ApplicationSession {
         } catch (ReturnCodeException e) {
             LOGGER.error("could not query DB for search request {}", rq.ret$PQON());
             return Collections.<Description>emptyList();
+        }
+    }
+
+    /** Retrieves data for a grouped dropdown without caching.
+     * @param rq
+     * @return
+     */
+    public Map<Long, DescriptionList> getGroupedDropDownData(LeanGroupedSearchRequest rq) {
+        try {
+            // certain grouped dropdowns (retail stores) can have lots of entries (> 1000 at least)
+            rq.setLimit(5000);
+            LeanGroupedSearchResponse dropdowndataResponse = Jdp.getRequired(T9TRemoteUtils.class).executeAndHandle(rq, LeanGroupedSearchResponse.class);
+            if (dropdowndataResponse.getReturnCode() != 0)
+                return new HashMap<Long, DescriptionList>();
+            return dropdowndataResponse.getResults();
+        } catch (ReturnCodeException e) {
+            LOGGER.error("could not query DB for search request {}", rq.ret$PQON());
+            return new HashMap<Long, DescriptionList>();
         }
     }
 

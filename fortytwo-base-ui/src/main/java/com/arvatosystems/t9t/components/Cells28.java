@@ -34,6 +34,7 @@ import com.arvatosystems.t9t.base.T9tConstants;
 import com.arvatosystems.t9t.base.entities.InternalTenantRef42;
 import com.arvatosystems.t9t.component.datafields.DataFieldParameters;
 import com.arvatosystems.t9t.component.datafields.DecimalDataField;
+import com.arvatosystems.t9t.component.datafields.GroupedDropdownDataField;
 import com.arvatosystems.t9t.component.datafields.IDataField;
 import com.arvatosystems.t9t.component.ext.IDataFieldFactory;
 import com.arvatosystems.t9t.component.ext.IViewModelOwner;
@@ -78,7 +79,6 @@ public class Cells28 extends Row {
     private String enums1 = null;
     private String decimals1 = null;
     private String type1 = null;
-
 
     public Cells28() {
         super();
@@ -268,5 +268,16 @@ public class Cells28 extends Row {
 
     public void setType1(String type1) {
         this.type1 = type1;
+    }
+
+    public void setGroup1(Object group1) {
+        setGroup(idf, group1);
+    }
+
+    protected void setGroup(IDataField df, Object object) {
+        if (df instanceof GroupedDropdownDataField) {
+            GroupedDropdownDataField groupedDropdownDF = (GroupedDropdownDataField) df;
+            groupedDropdownDF.setGroup(object);
+        }
     }
 }

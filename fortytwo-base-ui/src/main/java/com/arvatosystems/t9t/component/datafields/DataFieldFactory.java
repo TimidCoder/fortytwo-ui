@@ -25,6 +25,7 @@ import com.arvatosystems.t9t.tfi.component.Dropdown28Ext;
 import com.arvatosystems.t9t.tfi.component.dropdown.Dropdown28Registry;
 import com.arvatosystems.t9t.tfi.component.dropdown.IDropdown28BasicFactory;
 import com.arvatosystems.t9t.tfi.component.dropdown.IDropdown28DbFactory;
+import com.arvatosystems.t9t.tfi.component.dropdown.IGroupedDropdown28DbFactory;
 import com.arvatosystems.t9t.base.CrudViewModel;
 import com.arvatosystems.t9t.component.ext.IDataFieldFactory;
 
@@ -159,8 +160,15 @@ public class DataFieldFactory implements IDataFieldFactory {
                         LOGGER.warn("API specified a dropdown of type {} for {}, but it does not exist", dropdownType, path);
                         throw new RuntimeException("unknown dropdown " + dropdownType);
                     }
-                    IDropdown28DbFactory dbFactory = (IDropdown28DbFactory)factory;
-                    return new DropdownDataField(params, dropdownType, dbFactory);
+                    if (factory instanceof IDropdown28DbFactory) {
+                        IDropdown28DbFactory dbFactory = (IDropdown28DbFactory)factory;
+                        return new DropdownDataField(params, dropdownType, dbFactory);
+                    } else if (factory instanceof IGroupedDropdown28DbFactory) {
+                        IGroupedDropdown28DbFactory dbFactory = (IGroupedDropdown28DbFactory) factory;
+                        return new GroupedDropdownDataField(params, dropdownType, dbFactory);
+                    } else {
+                        LOGGER.error("Unsupported type of IDropdown28BasicFactory, implementation is needed in DataFieldLFactory");
+                    }
                 }
                 // check for bandboxes
                 String bandbox = null != fieldProperties ? fieldProperties.get("bandbox") : null;

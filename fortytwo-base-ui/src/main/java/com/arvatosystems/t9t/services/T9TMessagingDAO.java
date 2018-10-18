@@ -170,7 +170,7 @@ public class T9TMessagingDAO implements IT9TMessagingDAO {
     public void downloadFileAndSave(RequestParameters rp) {
         FileDownloadResponse fileDownloadResponse = t9tRemoteUtils.executeExpectOk(rp, FileDownloadResponse.class);
         SinkDTO sink = fileDownloadResponse.getSink();
-        String name = sink.getFileOrQueueName();
+        String name = new File(sink.getFileOrQueueName()).getName();
         String ctype = "text/plain";
         String format = "txt";
         int j = name.lastIndexOf('.');
