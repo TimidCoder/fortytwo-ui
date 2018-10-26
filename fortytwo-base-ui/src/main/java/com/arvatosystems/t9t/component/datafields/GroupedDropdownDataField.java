@@ -8,6 +8,7 @@ import com.arvatosystems.t9t.base.search.Description;
 import com.arvatosystems.t9t.tfi.component.dropdown.GroupedDropdown28Db;
 import com.arvatosystems.t9t.tfi.component.dropdown.IGroupedDropdown28DbFactory;
 
+import de.jpaw.bonaparte.enums.BonaEnum;
 import de.jpaw.bonaparte.pojos.apiw.Ref;
 
 public class GroupedDropdownDataField extends AbstractDataField<GroupedDropdown28Db<Ref>, Ref>{
@@ -71,6 +72,8 @@ public class GroupedDropdownDataField extends AbstractDataField<GroupedDropdown2
             setGroup(((Boolean) object).booleanValue());
         } else if (object instanceof Integer) {
             setGroup(((Integer) object).longValue());
+        } else if (object instanceof BonaEnum) {
+            setGroup(Long.valueOf(((BonaEnum) object).ordinal()));
         } else {
             LOGGER.debug("Unsupported type {} for group, only Integer, Long, Boolean or Ref is supported. ", object);
         }
